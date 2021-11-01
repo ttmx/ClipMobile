@@ -1,10 +1,11 @@
 package com.migueljteixeira.clipmobile.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.migueljteixeira.clipmobile.R;
 
 public class StudentNumbersActivity extends BaseActivity {
@@ -16,7 +17,7 @@ public class StudentNumbersActivity extends BaseActivity {
 
         setupActionBar();
 
-        Crashlytics.log("StudentNumbersActivity - onCreate");
+//        Crashlytics.log("StudentNumbersActivity - onCreate");
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.content_frame);

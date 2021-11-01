@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -53,11 +53,11 @@ public class ClipSettings {
         long loginTime = get(context).getLong(LOGIN_TIME, -1);
 
         long elapsedTime = currentTime - loginTime;
-        Crashlytics.log("ClipSettings - newCookie? - loginTime:" + loginTime);
-        Crashlytics.log("ClipSettings - newCookie? - currentTime:" + currentTime);
+//        Crashlytics.log("ClipSettings - newCookie? - loginTime:" + loginTime);
+//        Crashlytics.log("ClipSettings - newCookie? - currentTime:" + currentTime);
 
         int elapsedTimeInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(elapsedTime);
-        Crashlytics.log("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
+//        Crashlytics.log("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
         
         System.out.println("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
 

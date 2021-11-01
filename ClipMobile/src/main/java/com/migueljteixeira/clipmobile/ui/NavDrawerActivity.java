@@ -2,11 +2,8 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +12,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import androidx.core.view.GravityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.DrawerAdapter;
 import com.migueljteixeira.clipmobile.entities.Student;
@@ -24,7 +25,6 @@ import com.migueljteixeira.clipmobile.ui.dialogs.AboutDialogFragment;
 import com.migueljteixeira.clipmobile.ui.dialogs.ExportCalendarDialogFragment;
 import com.migueljteixeira.clipmobile.util.StudentTools;
 import com.migueljteixeira.clipmobile.util.tasks.UpdateStudentPageTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.Map;
 
@@ -32,7 +32,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NavDrawerActivity extends BaseActivity implements AdapterView.OnItemClickListener,
         UpdateStudentPageTask.OnUpdateTaskFinishedListener<Student> {
-    
+
     private static final String CURRENT_FRAGMENT_TITLE_TAG = "current_fragment_title";
     private static final String CURRENT_FRAGMENT_POSITION_TAG = "current_fragment_position";
 
@@ -58,12 +58,12 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
         setupActionBar();
 
-        Crashlytics.log("NavDrawerActivity - onCreate");
+//        Crashlytics.log("NavDrawerActivity - onCreate");
 
         setupNavDrawer();
 
         // Set toolbar title
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             setTitle(R.string.drawer_schedule);
             hideActionBarShadow();
         } else {
@@ -72,7 +72,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 setTitle(title);
 
                 int position = savedInstanceState.getInt(CURRENT_FRAGMENT_POSITION_TAG);
-                if(position == MENU_ITEM_SCHEDULE_POSITION ||
+                if (position == MENU_ITEM_SCHEDULE_POSITION ||
                         position == MENU_ITEM_CALENDAR_POSITION)
                     hideActionBarShadow();
             }
@@ -101,7 +101,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
         // Setup menu adapter
         DrawerAdapter drawerAdapter = new DrawerAdapter(this);
-        drawerAdapter.add(new DrawerTitle( ClipSettings.getYearSelected(this) ));
+        drawerAdapter.add(new DrawerTitle(ClipSettings.getYearSelected(this)));
         drawerAdapter.add(new DrawerDivider());
         drawerAdapter.add(new DrawerItem(getString(R.string.drawer_schedule), R.drawable.ic_books));
         drawerAdapter.add(new DrawerItem(getString(R.string.drawer_calendar), R.drawable.ic_calendar));
@@ -118,7 +118,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
         // If the device is smaller than 7',
         // hide the drawer and set the icon
-        if(! getResources().getBoolean(R.bool.drawer_opened)) {
+        if (!getResources().getBoolean(R.bool.drawer_opened)) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -132,7 +132,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        if(mDrawerList.getCheckedItemPosition() == MENU_ITEM_CALENDAR_POSITION)
+        if (mDrawerList.getCheckedItemPosition() == MENU_ITEM_CALENDAR_POSITION)
             inflater.inflate(R.menu.menu_student_page_calendar, menu);
         else
             inflater.inflate(R.menu.menu_student_page, menu);
@@ -144,9 +144,9 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
     public boolean onPrepareOptionsMenu(Menu menu) {
         int semester = ClipSettings.getSemesterSelected(this);
 
-        if(semester == 1)
+        if (semester == 1)
             menu.findItem(R.id.semester1).setChecked(true);
-        else if(semester == 2)
+        else if (semester == 2)
             menu.findItem(R.id.semester2).setChecked(true);
         else
             menu.findItem(R.id.trimester2).setChecked(true);
@@ -163,10 +163,8 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 mDrawerLayout.closeDrawer(GravityCompat.START);
             else
                 mDrawerLayout.openDrawer(GravityCompat.START);
-        }
-
-        else if(item.getItemId() == R.id.refresh) {
-            Crashlytics.log("NavDrawerActivity - refresh");
+        } else if (item.getItemId() == R.id.refresh) {
+//            Crashlytics.log("NavDrawerActivity - refresh");
 
             // Refreshing
             Toast.makeText(this, getString(R.string.refreshing),
@@ -174,10 +172,8 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
             // Start AsyncTask
             mUpdateTask = new UpdateStudentPageTask(this, NavDrawerActivity.this);
-            AndroidUtils.executeOnPool(mUpdateTask);
-        }
-
-        else if(item.getItemId() == R.id.export_calendar) {
+            mUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else if (item.getItemId() == R.id.export_calendar) {
             Map<Long, String> calendarsNames = StudentTools.confirmExportCalendar(this);
 
             long[] ids = new long[calendarsNames.size()];
@@ -199,9 +195,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
             DialogFragment dialog = new ExportCalendarDialogFragment();
             dialog.setArguments(bundle);
             dialog.show(getSupportFragmentManager(), "ExportCalendarDialogFragment");
-        }
-
-        else if(item.getItemId() == R.id.logout) {
+        } else if (item.getItemId() == R.id.logout) {
             // Clear user personal data
             ClipSettings.logoutUser(this);
 
@@ -210,22 +204,18 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
             overridePendingTransition(R.anim.slide_right_in, R.anim.slide_right_out);
             finish();
-        }
-
-        else if(item.getItemId() == R.id.about) {
+        } else if (item.getItemId() == R.id.about) {
             // Create an instance of the dialog fragment and show it
             DialogFragment dialog = new AboutDialogFragment();
             dialog.show(getSupportFragmentManager(), "AboutDialogFragment");
-        }
-
-        else if(!item.isChecked() && (item.getItemId() == R.id.semester1 || item.getItemId() == R.id.semester2)
+        } else if (!item.isChecked() && (item.getItemId() == R.id.semester1 || item.getItemId() == R.id.semester2)
                 || item.getItemId() == R.id.trimester2) {
             // Check item
             item.setChecked(true);
 
-            if(item.getItemId() == R.id.semester1)
+            if (item.getItemId() == R.id.semester1)
                 ClipSettings.saveSemesterSelected(this, 1);
-            else if(item.getItemId() == R.id.semester2)
+            else if (item.getItemId() == R.id.semester2)
                 ClipSettings.saveSemesterSelected(this, 2);
             else
                 ClipSettings.saveSemesterSelected(this, 3);
@@ -234,9 +224,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
             mDrawerList.performItemClick(mDrawerList.getChildAt(mDrawerList.getCheckedItemPosition()),
                     mDrawerList.getCheckedItemPosition(),
                     mDrawerList.getAdapter().getItemId(mDrawerList.getCheckedItemPosition()));
-        }
-
-        else
+        } else
             return super.onOptionsItemSelected(item);
 
         return true;
@@ -247,11 +235,10 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
         super.onPostCreate(savedInstanceState);
 
         // If the device is bigger than 7', keep the drawer opened
-        if(getResources().getBoolean(R.bool.drawer_opened)) {
+        if (getResources().getBoolean(R.bool.drawer_opened)) {
             //mDrawerLayout.openDrawer(GravityCompat.START);
             //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        }
-        else {
+        } else {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
@@ -260,12 +247,12 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
     @Override
     public void onBackPressed() {
-        if(getResources().getBoolean(R.bool.drawer_opened) ||
+        if (getResources().getBoolean(R.bool.drawer_opened) ||
                 !mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
 
             FragmentManager fm = getSupportFragmentManager();
             Fragment fragment = fm.findFragmentByTag(ClassesDocsFragment.FRAGMENT_TAG);
-            if(fragment != null) {
+            if (fragment != null) {
                 // Refresh current view
                 mDrawerList.performItemClick(mDrawerList.getChildAt(mDrawerList.getCheckedItemPosition()),
                         mDrawerList.getCheckedItemPosition(),
@@ -290,7 +277,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
         invalidateOptionsMenu();
 
-        switch(position) {
+        switch (position) {
             case MENU_ITEM_SCHEDULE_POSITION:
                 setTitle(R.string.drawer_schedule);
                 hideActionBarShadow();
@@ -322,7 +309,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 break;
         }
 
-        if(isFinishing())
+        if (isFinishing())
             return;
 
         // Replace fragment and close drawer
@@ -331,13 +318,13 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
                 .commitAllowingStateLoss();
 
         // If the device is bigger than 7', don't close the drawer
-        if(! getResources().getBoolean(R.bool.drawer_opened))
+        if (!getResources().getBoolean(R.bool.drawer_opened))
             mDrawerLayout.closeDrawer(GravityCompat.START);
     }
 
     @Override
     public void onUpdateTaskFinished(Student result) {
-        if(isFinishing())
+        if (isFinishing())
             return;
 
         // Refresh current view

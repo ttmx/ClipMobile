@@ -2,7 +2,7 @@
 package com.uwetrottmann.androidutils;
 
 import android.content.Context;
-import android.support.v4.content.AsyncTaskLoader;
+import androidx.core.content.AsyncTaskLoader;
 
 import java.util.List;
 

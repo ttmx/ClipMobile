@@ -2,11 +2,12 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.migueljteixeira.clipmobile.R;
 
@@ -15,8 +16,12 @@ import butterknife.ButterKnife;
 
 public class BaseFragment extends Fragment {
 
-    @Nullable @Bind(R.id.progress_spinner) FrameLayout mProgressSpinner;
-    @Nullable @Bind(R.id.main_view) CardView mMainView;
+    @Nullable
+    @Bind(R.id.progress_spinner)
+    FrameLayout mProgressSpinner;
+    @Nullable
+    @Bind(R.id.main_view)
+    CardView mMainView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

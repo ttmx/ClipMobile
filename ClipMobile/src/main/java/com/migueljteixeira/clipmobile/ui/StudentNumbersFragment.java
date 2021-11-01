@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentNumbersAdapter;
 import com.migueljteixeira.clipmobile.entities.Student;
@@ -22,7 +22,7 @@ import com.migueljteixeira.clipmobile.ui.dialogs.AboutDialogFragment;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentNumbersTask;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentYearsTask;
 import com.migueljteixeira.clipmobile.util.tasks.UpdateStudentNumbersTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
+//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.List;
 
@@ -78,7 +78,8 @@ public class StudentNumbersFragment extends BaseFragment
 
         // Start AsyncTask
         mNumbersTask = new GetStudentNumbersTask(getActivity(), StudentNumbersFragment.this);
-        AndroidUtils.executeOnPool(mNumbersTask);
+        mNumbersTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        AndroidUtils.executeOnPool(mNumbersTask);
     }
 
     @Override
@@ -91,7 +92,7 @@ public class StudentNumbersFragment extends BaseFragment
 
         switch (item.getItemId()) {
             case R.id.refresh :
-                Crashlytics.log("StudentNumbersFragment - refresh");
+//                Crashlytics.log("StudentNumbersFragment - refresh");
 
                 Toast.makeText(getActivity(), getActivity().getString(R.string.refreshing),
                         Toast.LENGTH_LONG).show();
@@ -99,12 +100,13 @@ public class StudentNumbersFragment extends BaseFragment
                 // Start AsyncTask
                 mUpdateTask = new UpdateStudentNumbersTask(getActivity(),
                         StudentNumbersFragment.this);
-                AndroidUtils.executeOnPool(mUpdateTask);
+                mUpdateTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//                AndroidUtils.executeOnPool(mUpdateTask);
 
                return true;
 
             case R.id.logout :
-                Crashlytics.log("StudentNumbersFragment - logout");
+//                Crashlytics.log("StudentNumbersFragment - logout");
                 
                 // Clear user personal data
                 ClipSettings.logoutUser(getActivity());
@@ -133,7 +135,7 @@ public class StudentNumbersFragment extends BaseFragment
     ExpandableListView.OnGroupClickListener onGroupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-            Crashlytics.log("StudentNumbersFragment - group clicked");
+//            Crashlytics.log("StudentNumbersFragment - group clicked");
 
             // If the yearsTask is running, do not allow group click
             if( mYearsTask != null && mYearsTask.getStatus() != AsyncTask.Status.FINISHED ) {
@@ -151,7 +153,8 @@ public class StudentNumbersFragment extends BaseFragment
                         ", student.getNumberId() " + students.get(groupPosition).getNumberId());
 
                 mYearsTask = new GetStudentYearsTask(getActivity(), StudentNumbersFragment.this);
-                AndroidUtils.executeOnPool(mYearsTask, students.get(groupPosition), groupPosition);
+                mYearsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,students.get(groupPosition),groupPosition);
+//                AndroidUtils.executeOnPool(mYearsTask, students.get(groupPosition), groupPosition);
             }
 
             return true;
@@ -162,7 +165,7 @@ public class StudentNumbersFragment extends BaseFragment
 
         @Override
         public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-            Crashlytics.log("StudentNumbersFragment - child clicked");
+//            Crashlytics.log("StudentNumbersFragment - child clicked");
             
             // If the updateTask is running, do not allow child click
             if( mUpdateTask != null && mUpdateTask.getStatus() != AsyncTask.Status.FINISHED ) {
@@ -197,7 +200,7 @@ public class StudentNumbersFragment extends BaseFragment
         if(!isAdded())
             return;
 
-        Crashlytics.log("StudentNumbersFragment - onStudentNumbersTaskFinished");
+//        Crashlytics.log("StudentNumbersFragment - onStudentNumbersTaskFinished");
 
         students = result.getStudents();
         showProgressSpinner(false);
@@ -213,7 +216,7 @@ public class StudentNumbersFragment extends BaseFragment
         if(!isAdded())
             return;
 
-        Crashlytics.log("StudentNumbersFragment - onStudentYearsTaskFinished");
+//        Crashlytics.log("StudentNumbersFragment - onStudentYearsTaskFinished");
 
         showProgressSpinnerOnly(false);
 
@@ -234,7 +237,7 @@ public class StudentNumbersFragment extends BaseFragment
         if(!isAdded())
             return;
 
-        Crashlytics.log("StudentNumbersFragment - onUpdateTaskFinished");
+//        Crashlytics.log("StudentNumbersFragment - onUpdateTaskFinished");
 
         // Server is unavailable right now
         if(result == null)

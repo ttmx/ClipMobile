@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleClassesColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleDaysColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentCalendarColumns;
@@ -259,11 +259,10 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Crashlytics.log("ClipMobileDatabse - onUpgrade from " + oldVersion + " to " + newVersion);
-        
-        switch(oldVersion) {
-            case 1:
-                upgradeToSecond(db);
+//        Crashlytics.log("ClipMobileDatabse - onUpgrade from " + oldVersion + " to " + newVersion);
+
+        if (oldVersion == 1) {
+            upgradeToSecond(db);
         }
         
     }

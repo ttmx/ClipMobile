@@ -1,5 +1,6 @@
 package com.migueljteixeira.clipmobile.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.ScheduleViewPagerAdapter;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentScheduleTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
+//import com.uwetrottmann.androidutils.AndroidUtils;
 
 public class ScheduleViewPager extends BaseViewPager
         implements GetStudentScheduleTask.OnTaskFinishedListener<Student> {
@@ -23,7 +24,8 @@ public class ScheduleViewPager extends BaseViewPager
 
         // Start AsyncTask
         mTask = new GetStudentScheduleTask(getActivity(), ScheduleViewPager.this);
-        AndroidUtils.executeOnPool(mTask);
+        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        AndroidUtils.executeOnPool(mTask);
 
         return view;
     }

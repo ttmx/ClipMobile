@@ -1,13 +1,15 @@
 package com.migueljteixeira.clipmobile.ui;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.ClassListViewAdapter;
@@ -15,7 +17,7 @@ import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClass;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
+//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.List;
 
@@ -39,7 +41,8 @@ public class ClassesFragment extends BaseFragment
 
         // Start AsyncTask
         mTask = new GetStudentClassesTask(getActivity(), ClassesFragment.this);
-        AndroidUtils.executeOnPool(mTask);
+        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        AndroidUtils.executeOnPool(mTask);
 
         return view;
     }

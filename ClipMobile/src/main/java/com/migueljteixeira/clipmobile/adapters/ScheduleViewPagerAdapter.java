@@ -2,9 +2,10 @@ package com.migueljteixeira.clipmobile.adapters;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentScheduleClass;
@@ -47,7 +48,7 @@ public class ScheduleViewPagerAdapter extends FragmentPagerAdapter {
     private Bundle getBundle(List<StudentScheduleClass> classes) {
         Bundle bundle = new Bundle();
 
-        if(classes != null) {
+        if (classes != null) {
             // LinkedList to ArrayList 'conversion'
             ArrayList<StudentScheduleClass> list = new ArrayList<StudentScheduleClass>();
             list.addAll(classes);

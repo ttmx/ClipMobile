@@ -1,7 +1,10 @@
 package com.migueljteixeira.clipmobile.ui;
 
-import android.support.v4.view.ViewPager;
+//import android.view.View;
+
 import android.view.View;
+
+import androidx.viewpager.widget.ViewPager;
 
 public class DepthPageTransformer implements ViewPager.PageTransformer {
     

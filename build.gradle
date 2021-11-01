@@ -1,23 +1,17 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-apply plugin: 'com.github.ben-manes.versions'
+//apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.4.0-beta1'
-        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
+        classpath 'com.android.tools.build:gradle:7.0.3'
+//        classpath 'com.github.ben-manes:gradle-versions-plugin:0.11.3'
     }
 }
 
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
-
-ext {
-    compileSdkVersion = 23
-    buildToolsVersion = "23.0.0"
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }

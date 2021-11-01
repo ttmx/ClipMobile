@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <androidx.cardview.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_view"
         android:layout_width="@dimen/fragment_student_numbers_card_width"
         android:layout_height="@dimen/fragment_student_numbers_card_height"
@@ -37,7 +37,7 @@
 
         </LinearLayout>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
     <include layout="@layout/progress_spinner" />
 

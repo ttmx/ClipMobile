@@ -1,11 +1,12 @@
 package com.migueljteixeira.clipmobile.ui;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.ScheduleListViewAdapter;
@@ -15,7 +16,7 @@ import com.migueljteixeira.clipmobile.entities.StudentScheduleClass;
 import java.util.List;
 
 public class ScheduleFragment extends Fragment {
-    
+
     private List<StudentScheduleClass> classes;
 
     @Override
@@ -47,7 +48,8 @@ public class ScheduleFragment extends Fragment {
 
     public static class ListViewItemEmpty {
 
-        public ListViewItemEmpty() {}
+        public ListViewItemEmpty() {
+        }
     }
 
     public static class ListViewItem {

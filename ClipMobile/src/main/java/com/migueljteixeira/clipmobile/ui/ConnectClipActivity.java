@@ -2,14 +2,15 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 
-import io.fabric.sdk.android.Fabric;
+//import io.fabric.sdk.android.Fabric;
 
 public class ConnectClipActivity extends BaseActivity {
 
@@ -21,13 +22,13 @@ public class ConnectClipActivity extends BaseActivity {
         setupActionBar();
 
         // Crash system reporting
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
 
-        Crashlytics.log("ConnectClipActivity - onCreate");
+//        Crashlytics.log("ConnectClipActivity - onCreate");
 
         // If the user has already login, start the StudentNumbersActivity instead
         if( ClipSettings.isUserLoggedIn(this) ) {
-            Crashlytics.log("ConnectClipActivity - user has already login");
+//            Crashlytics.log("ConnectClipActivity - user has already login");
             
             Intent intent = new Intent(this, StudentNumbersActivity.class);
             startActivity(intent);

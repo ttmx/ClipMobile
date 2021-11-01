@@ -13,7 +13,7 @@ import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesDocsTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
+//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -81,7 +81,8 @@ public class ClassesDocsFragment extends BaseFragment
                 showProgressSpinnerOnly(true);
 
                 mDocsTask = new GetStudentClassesDocsTask(getActivity(), ClassesDocsFragment.this);
-                AndroidUtils.executeOnPool(mDocsTask, groupPosition);
+                mDocsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,groupPosition);
+//                AndroidUtils.executeOnPool(mDocsTask, groupPosition);
             }
 
             return true;

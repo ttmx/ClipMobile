@@ -2,7 +2,7 @@ package com.migueljteixeira.clipmobile.network;
 
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 
@@ -99,7 +99,7 @@ public abstract class Request {
         
         for(Element input : inputs)
             if(input.attr("name").equals(ID) || input.attr("name").equals(PW)) {
-                Crashlytics.log("Request - Requesting with user data");
+//                Crashlytics.log("Request - Requesting with user data");
                 System.out.println("Request - Requesting with user data");
 
                 requestNewCookie(context, ClipSettings.getLoggedInUserName(context),

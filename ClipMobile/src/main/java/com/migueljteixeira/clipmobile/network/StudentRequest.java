@@ -2,7 +2,7 @@ package com.migueljteixeira.clipmobile.network;
 
 import android.content.Context;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentYearSemester;
 import com.migueljteixeira.clipmobile.entities.User;
@@ -41,8 +41,8 @@ public class StudentRequest extends Request {
                 student.setNumberId(student_numberID);
                 student.setNumber(student_number);
 
-                Crashlytics.log("StudentRequest - signIn - numberID:" + student_numberID);
-                Crashlytics.log("StudentRequest - signIn - number:" + student_number);
+//                Crashlytics.log("StudentRequest - signIn - numberID:" + student_numberID);
+//                Crashlytics.log("StudentRequest - signIn - number:" + student_number);
 
                 user.addStudent(student);
             }
@@ -85,10 +85,10 @@ public class StudentRequest extends Request {
                 student.setNumberId(student_numberID);
                 student.setNumber(student_number);
 
-                Crashlytics.log("StudentRequest - getStudentsNumbers - numberID:" + student_numberID);
+//                Crashlytics.log("StudentRequest - getStudentsNumbers - numberID:" + student_numberID);
                 System.out.println("StudentRequest - getStudentsNumbers - numberID:" + student_numberID);
                 
-                Crashlytics.log("StudentRequest - getStudentsNumbers - number:" + student_number);
+//                Crashlytics.log("StudentRequest - getStudentsNumbers - number:" + student_number);
                 System.out.println("StudentRequest - getStudentsNumbers - number:" + student_number);
 
                 user.addStudent(student);
@@ -118,7 +118,7 @@ public class StudentRequest extends Request {
                 StudentYearSemester studentYear = new StudentYearSemester();
                 studentYear.setYear(year);
 
-                Crashlytics.log("StudentRequest - getStudentsYears - year:" + year);
+//                Crashlytics.log("StudentRequest - getStudentsYears - year:" + year);
 
                 student.addYear(studentYear);
             }

@@ -2,11 +2,13 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+
+import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.CalendarViewPagerAdapter;
@@ -22,9 +24,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CalendarFragment extends Fragment implements CalendarPickerView.OnDateSelectedListener {
-    
+
     public static final String APPOINTMENT_TAG = "appointment_tag";
-    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");;
+    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    ;
     private List<StudentCalendar> calendar;
 
     @Override
@@ -54,14 +57,14 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
 
     @Override
     public void onDateSelected(Date date) {
-        if(this.calendar == null)
+        if (this.calendar == null)
             return;
 
         for (StudentCalendar appointment : this.calendar) {
             try {
                 Date appointmentDate = format.parse(appointment.getDate());
 
-                if(appointmentDate.equals(date)) {
+                if (appointmentDate.equals(date)) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable(APPOINTMENT_TAG, appointment);
 
@@ -78,12 +81,13 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
     }
 
     @Override
-    public void onDateUnselected(Date date) {}
+    public void onDateUnselected(Date date) {
+    }
 
     private List<Date> getDatesToHighlight() {
         List<Date> dates = new LinkedList<Date>();
 
-        if(calendar == null)
+        if (calendar == null)
             return dates;
 
         for (StudentCalendar appointment : calendar) {

@@ -8,7 +8,7 @@ import android.view.MotionEvent;
  * Hacky fix for the following issue
  * https://code.google.com/p/android/issues/detail?id=60464
  */
-public class DrawerLayout extends android.support.v4.widget.DrawerLayout {
+public class DrawerLayout extends androidx.drawerlayout.widget.DrawerLayout {
     
     public DrawerLayout(Context context) {
         super(context);

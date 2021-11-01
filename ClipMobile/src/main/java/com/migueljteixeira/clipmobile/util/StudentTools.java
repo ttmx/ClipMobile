@@ -4,7 +4,9 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.widget.Toast;
 
@@ -21,7 +23,6 @@ import com.migueljteixeira.clipmobile.network.StudentScheduleRequest;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 import com.migueljteixeira.clipmobile.util.tasks.BaseTask;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentCalendarTask;
-import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -30,24 +31,31 @@ import java.util.Map;
 
 public class StudentTools {
 
+    public static boolean isNetworkConnected(Context mContext) {
+        ConnectivityManager conMan = (ConnectivityManager) mContext.getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return conMan != null && conMan.getActiveNetworkInfo().isConnected();
+    }
+
     public static Result signIn(Context mContext, String username, String password)
             throws ServerUnavailableException {
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (isNetworkConnected(mContext))
             return Result.OFFLINE;
 
         // Sign in the user, and returns Students available
         User user = StudentRequest.signIn(mContext, username, password);
 
         // Invalid credentials
-        if(! user.hasStudents())
+        if (!user.hasStudents())
             return Result.ERROR;
 
         long userId = DBUtils.getUserId(mContext, username);
 
         // If the user doesn't exist, create a new one
-        if(userId == -1) {
+        if (userId == -1) {
             userId = DBUtils.createUser(mContext, username);
 
             // Insert Students
@@ -76,13 +84,13 @@ public class StudentTools {
 
         System.out.println("has " + student.hasStudentYears());
 
-        if(student.hasStudentYears())
+        if (student.hasStudentYears())
             return student;
 
-        System.out.println("net " + !AndroidUtils.isNetworkConnected(mContext));
+        System.out.println("net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return null;
 
         // Get student years from the server
@@ -153,13 +161,13 @@ public class StudentTools {
 
         System.out.println("has " + (student != null));
 
-        if(student != null)
+        if (student != null)
             return student;
 
-        System.out.println("net " + !AndroidUtils.isNetworkConnected(mContext));
+        System.out.println("net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return null;
 
         // Get student schedule from the server
@@ -181,7 +189,7 @@ public class StudentTools {
 
 
     public static Student getStudentClasses(Context mContext, String studentId, String year, String yearFormatted,
-                                             int semester, String studentNumberId)
+                                            int semester, String studentNumberId)
             throws ServerUnavailableException {
 
         // First, we get the yearSemesterId
@@ -191,13 +199,13 @@ public class StudentTools {
 
         System.out.println("has " + (student != null));
 
-        if(student != null)
+        if (student != null)
             return student;
 
-        System.out.println("net " + !AndroidUtils.isNetworkConnected(mContext));
+        System.out.println("net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return null;
 
         // Get student classes from the server
@@ -214,21 +222,21 @@ public class StudentTools {
     }
 
     public static Student getStudentClassesDocs(Context mContext, String studentClassId, String yearFormatted,
-                                            int semester, String studentNumberId, String studentClassSelected,
-                                            String docType)
+                                                int semester, String studentNumberId, String studentClassSelected,
+                                                String docType)
             throws ServerUnavailableException {
 
         Student student = DBUtils.getStudentClassesDocs(mContext, studentClassId, docType);
 
         System.out.println("has " + (student != null));
 
-        if(student != null)
+        if (student != null)
             return student;
 
-        System.out.println("net " + !AndroidUtils.isNetworkConnected(mContext));
+        System.out.println("net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return null;
 
         // Get student classes docs from the server
@@ -260,13 +268,13 @@ public class StudentTools {
 
         System.out.println("has " + (student != null));
 
-        if(student != null)
+        if (student != null)
             return student;
 
-        System.out.println("net " + !AndroidUtils.isNetworkConnected(mContext));
+        System.out.println("net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
-        if (! AndroidUtils.isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return null;
 
         // ---- EXAM CALENDAR ----
@@ -292,7 +300,7 @@ public class StudentTools {
 
     public static Map<Long, String> confirmExportCalendar(Context mContext) {
 
-        final String[] EVENT_PROJECTION = new String[] {
+        final String[] EVENT_PROJECTION = new String[]{
                 CalendarContract.Calendars._ID,                           // 0
                 CalendarContract.Calendars.ACCOUNT_NAME,                  // 1
                 CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,         // 2
@@ -309,17 +317,17 @@ public class StudentTools {
         ContentResolver cr = mContext.getContentResolver();
         Uri uri = CalendarContract.Calendars.CONTENT_URI;
         String selection = "((" + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?))";
-        String[] selectionArgs = new String[] {"com.google"};
+        String[] selectionArgs = new String[]{"com.google"};
 
         // Submit the query and get a Cursor object back.
         Cursor cursor = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
         Map<Long, String> calendars_names = new HashMap<Long, String>();
-        while(cursor.moveToNext()) {
-            long calID = 0;
-            String displayName = null;
-            String accountName = null;
-            String ownerName = null;
+        while (cursor.moveToNext()) {
+            long calID;
+            String displayName;
+            String accountName;
+            String ownerName;
 
             // Get the field values
             calID = cursor.getLong(PROJECTION_ID_INDEX);
@@ -327,8 +335,8 @@ public class StudentTools {
             accountName = cursor.getString(PROJECTION_ACCOUNT_NAME_INDEX);
             ownerName = cursor.getString(PROJECTION_OWNER_ACCOUNT_INDEX);
 
-            if(displayName.equalsIgnoreCase(accountName) &&
-               accountName.equalsIgnoreCase(ownerName)) {
+            if (displayName.equalsIgnoreCase(accountName) &&
+                    accountName.equalsIgnoreCase(ownerName)) {
 
                 calendars_names.put(calID, ownerName);
             }
@@ -347,11 +355,11 @@ public class StudentTools {
 
                 Map<Boolean, List<StudentCalendar>> calendar = result.getStudentCalendar();
 
-                for(Map.Entry<Boolean, List<StudentCalendar>> event : calendar.entrySet()) {
+                for (Map.Entry<Boolean, List<StudentCalendar>> event : calendar.entrySet()) {
                     boolean isExam = event.getKey();
                     List<StudentCalendar> calendarEvent = event.getValue();
 
-                    for(StudentCalendar e : calendarEvent) {
+                    for (StudentCalendar e : calendarEvent) {
                         String name = e.getName();
                         String date = e.getDate();
                         String hour = e.getHour();
@@ -364,7 +372,8 @@ public class StudentTools {
                         Toast.LENGTH_LONG).show();
             }
         });
-        AndroidUtils.executeOnPool(mTask);
+        mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+//        AndroidUtils.executeOnPool(mTask);
 
     }
 
@@ -390,7 +399,7 @@ public class StudentTools {
         int begin_hour = Integer.parseInt(h[0]);
 
         int begin_minutes;
-        if(isExam)
+        if (isExam)
             begin_minutes = Integer.parseInt(h[1].substring(0, h.length));
         else
             begin_minutes = Integer.parseInt(h[1]);

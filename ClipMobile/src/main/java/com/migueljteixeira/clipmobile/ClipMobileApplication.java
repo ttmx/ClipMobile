@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.StrictMode;
 
-import com.uwetrottmann.androidutils.AndroidUtils;
+//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
@@ -27,9 +27,9 @@ public class ClipMobileApplication extends Application {
         enableStrictMode();
     }
 
-    @SuppressLint("NewApi")
+//    @SuppressLint("NewApi")
     private void enableStrictMode() {
-        if (!BuildConfig.DEBUG || !AndroidUtils.isGingerbreadOrHigher())
+        if (!BuildConfig.DEBUG)
             return;
 
         // Enable StrictMode
@@ -40,7 +40,7 @@ public class ClipMobileApplication extends Application {
         final StrictMode.VmPolicy.Builder vmPolicyBuilder = new StrictMode.VmPolicy.Builder();
         vmPolicyBuilder.detectAll();
         vmPolicyBuilder.penaltyLog();
-        if (AndroidUtils.isJellyBeanOrHigher())
+//        if (AndroidUtils.isJellyBeanOrHigher())
             vmPolicyBuilder.detectLeakedRegistrationObjects();
 
         StrictMode.setVmPolicy(vmPolicyBuilder.build());
