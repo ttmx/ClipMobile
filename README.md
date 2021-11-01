@@ -3,6 +3,8 @@
 [![](https://drive.google.com/uc?id=0B1tnx50O2XkNY08tYmxJUVdGakE)](https://play.google.com/store/apps/details?id=com.migueljteixeira.clipmobile)
 
 
+The original works by Miguel Teixeira are Licensed under Apache License Version 2.0. The new contributions are licensed under GPL 3.0.
+
 License
 -------
 
