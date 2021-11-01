@@ -42,7 +42,7 @@ public class StudentTools {
             throws ServerUnavailableException {
 
         // Check for connectivity
-        if (isNetworkConnected(mContext))
+        if (!isNetworkConnected(mContext))
             return Result.OFFLINE;
 
         // Sign in the user, and returns Students available

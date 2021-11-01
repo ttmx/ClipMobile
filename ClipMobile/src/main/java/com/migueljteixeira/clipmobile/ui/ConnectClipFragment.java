@@ -13,15 +13,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.databinding.FragmentActivityLoginBinding;
 import com.migueljteixeira.clipmobile.enums.Result;
 import com.migueljteixeira.clipmobile.util.tasks.ConnectClipTask;
-//import com.uwetrottmann.androidutils.AndroidUtils;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class ConnectClipFragment extends BaseFragment
         implements ConnectClipTask.OnTaskFinishedListener<Result> {
@@ -34,14 +29,12 @@ public class ConnectClipFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_activity_login, container, false);
-        ButterKnife.bind(this, view);
         FragmentActivityLoginBinding binding = FragmentActivityLoginBinding.inflate(inflater);
+        View root = binding.getRoot();
         mUsername = binding.username;
         mPassword = binding.password;
         mLogInButton = binding.logInButton;
-
-        return view;
+        return root;
     }
 
     @Override
@@ -83,7 +76,7 @@ public class ConnectClipFragment extends BaseFragment
 
                 // Start AsyncTask
                 mTask = new ConnectClipTask(getActivity(), ConnectClipFragment.this);
-                mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,username,password);
+                mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, username, password);
 //                    AndroidUtils.executeOnPool(mTask, username, password);
             }
 
@@ -92,13 +85,13 @@ public class ConnectClipFragment extends BaseFragment
 
     @Override
     public void onTaskFinished(Result result) {
-        if(!isAdded())
+        if (!isAdded())
             return;
 
         showProgressSpinner(false);
 
         // If there was no errors, lets go to StudentNumbersActivity
-        if(result == Result.SUCCESS) {
+        if (result == Result.SUCCESS) {
             Intent intent = new Intent(getActivity(), StudentNumbersActivity.class);
             startActivity(intent);
 

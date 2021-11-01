@@ -28,7 +28,9 @@ import com.migueljteixeira.clipmobile.util.tasks.UpdateStudentPageTask;
 
 import java.util.Map;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
+
+//import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class NavDrawerActivity extends BaseActivity implements AdapterView.OnItemClickListener,
         UpdateStudentPageTask.OnUpdateTaskFinishedListener<Student> {
@@ -48,7 +50,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 
     @Override

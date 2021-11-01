@@ -1,12 +1,15 @@
 package com.migueljteixeira.clipmobile;
 
-import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.StrictMode;
 
+import io.github.inflationx.calligraphy3.CalligraphyConfig;
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
+import io.github.inflationx.viewpump.ViewPump;
+
 //import com.uwetrottmann.androidutils.AndroidUtils;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+//import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class ClipMobileApplication extends Application {
 
@@ -15,10 +18,20 @@ public class ClipMobileApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("Roboto-Regular.ttf")
-                .setFontAttrId(R.attr.fontPath)
+
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new CalligraphyInterceptor(
+                        new CalligraphyConfig.Builder()
+
+                                .setDefaultFontPath("Roboto-Regular.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
                 .build());
+
+//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+//                .setDefaultFontPath("Roboto-Regular.ttf")
+//                .setFontAttrId(R.attr.fontPath)
+//                .build());
 
         // Set provider authority
         CONTENT_AUTHORITY = getString(R.string.provider_authority);
@@ -27,7 +40,7 @@ public class ClipMobileApplication extends Application {
         enableStrictMode();
     }
 
-//    @SuppressLint("NewApi")
+    //    @SuppressLint("NewApi")
     private void enableStrictMode() {
         if (!BuildConfig.DEBUG)
             return;
@@ -41,7 +54,7 @@ public class ClipMobileApplication extends Application {
         vmPolicyBuilder.detectAll();
         vmPolicyBuilder.penaltyLog();
 //        if (AndroidUtils.isJellyBeanOrHigher())
-            vmPolicyBuilder.detectLeakedRegistrationObjects();
+        vmPolicyBuilder.detectLeakedRegistrationObjects();
 
         StrictMode.setVmPolicy(vmPolicyBuilder.build());
     }

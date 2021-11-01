@@ -13,8 +13,11 @@ import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 //import com.crashlytics.android.Crashlytics;
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentNumbersAdapter;
+import com.migueljteixeira.clipmobile.databinding.FragmentStudentNumbersBinding;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.User;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
@@ -36,7 +39,7 @@ public class StudentNumbersFragment extends BaseFragment
 
     private StudentNumbersAdapter mListAdapter;
     private List<Student> students;
-    @Bind(R.id.list_view) ExpandableListView mListView;
+    ExpandableListView mListView;
 
     private GetStudentYearsTask mYearsTask;
     private UpdateStudentNumbersTask mUpdateTask;
@@ -51,10 +54,10 @@ public class StudentNumbersFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_numbers, container, false);
-        ButterKnife.bind(this, view);
+        FragmentStudentNumbersBinding binding = FragmentStudentNumbersBinding.inflate(inflater);
+        mListView = binding.listView;
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
