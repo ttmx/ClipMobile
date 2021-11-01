@@ -46,7 +46,7 @@ public class ScheduleViewPager extends BaseViewPager
         mViewPager.setPageTransformer(true, new DepthPageTransformer());
 
         // Bind the tabs to the ViewPager
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
+        PagerSlidingTabStrip tabs = view.findViewById(R.id.tabs);
         tabs.setViewPager(mViewPager);
     }
 

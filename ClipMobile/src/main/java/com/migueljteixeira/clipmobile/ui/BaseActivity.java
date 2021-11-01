@@ -14,7 +14,7 @@ public class BaseActivity extends AppCompatActivity {
     protected Toolbar mToolbar;
 
     protected void setupActionBar() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mToolbar = findViewById(R.id.toolbar);
         mToolbar.setTitleTextColor(Color.WHITE);
         mToolbar.setTitleTextAppearance(this, R.style.Toolbar);
 

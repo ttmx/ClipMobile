@@ -66,7 +66,7 @@ public class StudentClassesDocsAdapter extends BaseExpandableListAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_group_student_numbers, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.name = convertView.findViewById(R.id.name);
 
             convertView.setTag(viewHolder);
         } else {
@@ -87,7 +87,7 @@ public class StudentClassesDocsAdapter extends BaseExpandableListAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_child_student_classes_docs, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.name = convertView.findViewById(R.id.name);
 
             convertView.setTag(viewHolder);
         } else {

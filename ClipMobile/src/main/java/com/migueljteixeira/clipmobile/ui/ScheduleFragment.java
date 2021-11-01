@@ -29,7 +29,7 @@ public class ScheduleFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.list_view, container, false);
-        ListView listView = (ListView) view.findViewById(R.id.list_view);
+        ListView listView = view.findViewById(R.id.list_view);
 
         ScheduleListViewAdapter adapter = new ScheduleListViewAdapter(getActivity());
 

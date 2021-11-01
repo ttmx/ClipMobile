@@ -60,10 +60,10 @@ public class DrawerAdapter extends ArrayAdapter<Object> {
             }
             else {
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.drawer_item, parent, false);
-                viewHolder.icon = (ImageView) convertView.findViewById(R.id.icon);
+                viewHolder.icon = convertView.findViewById(R.id.icon);
             }
             
-            viewHolder.name = (TextView) convertView.findViewById(R.id.name);
+            viewHolder.name = convertView.findViewById(R.id.name);
             
             convertView.setTag(viewHolder);
         } else {

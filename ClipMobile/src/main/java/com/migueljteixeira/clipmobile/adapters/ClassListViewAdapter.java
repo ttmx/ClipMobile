@@ -26,7 +26,7 @@ public class ClassListViewAdapter extends ArrayAdapter<Object> {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_class, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(R.id.class_name);
+            viewHolder.name = convertView.findViewById(R.id.class_name);
 
             convertView.setTag(viewHolder);
         } else {

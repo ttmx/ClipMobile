@@ -31,7 +31,7 @@ public class ClassesFragment extends BaseFragment
 //        ButterKnife.bind(this, view);
         super.bindHelperViews(view);
 
-        mListView = (ListView) view.findViewById(R.id.list_view);
+        mListView = view.findViewById(R.id.list_view);
 
         // Show progress spinner
         showProgressSpinner(true);

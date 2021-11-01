@@ -90,10 +90,12 @@ public abstract class Request {
         // Execute the request
         Connection.Response response;
         response = connection.execute();
+//        response = connection.execute().bufferUp();
 
         // If clip website returns, for some reason,
         // the login page, request new cookie
         Elements inputs = response.parse()
+//        Elements inputs = response.parse()
                 .body().getElementsByTag("input");
         
         for(Element input : inputs)

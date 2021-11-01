@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.CalendarContract;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.migueljteixeira.clipmobile.entities.Student;
@@ -228,12 +229,12 @@ public class StudentTools {
 
         Student student = DBUtils.getStudentClassesDocs(mContext, studentClassId, docType);
 
-        System.out.println("has " + (student != null));
+        Log.d("StudentTools","has " + (student != null));
 
         if (student != null)
             return student;
 
-        System.out.println("net " + !isNetworkConnected(mContext));
+        Log.d("StudentTools","net " + !isNetworkConnected(mContext));
 
         // Check for connectivity
         if (!isNetworkConnected(mContext))
@@ -243,12 +244,12 @@ public class StudentTools {
         student = StudentClassesDocsRequest.getClassesDocs(mContext, studentNumberId,
                 yearFormatted, semester, studentClassSelected, docType);
 
-        System.out.println("classes docs request done!");
+        Log.d("StudentTools","classes docs request done!");
 
         // Insert classes docs on database
         DBUtils.insertStudentClassesDocs(mContext, studentClassId, student);
 
-        System.out.println("classes docs inserted!");
+        Log.d("StudentTools","classes docs inserted!");
 
         return student;
     }

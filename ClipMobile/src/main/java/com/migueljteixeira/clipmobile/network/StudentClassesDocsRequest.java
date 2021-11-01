@@ -78,7 +78,7 @@ public class StudentClassesDocsRequest extends Request {
         request.setTitle(name);
 
         // In order for this to run, you must use the android 3.2 to compile your app
-        request.allowScanningByMediaScanner();
+//        request.allowScanningByMediaScanner();
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
 

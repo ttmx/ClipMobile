@@ -31,7 +31,7 @@ public class InfoMapFragment extends BaseFragment {
         mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
-        Picasso.with(getActivity())
+        Picasso.get()
                 .load(R.drawable.map_campus)
                 .into(mImageView, new Callback() {
                     @Override
@@ -40,8 +40,8 @@ public class InfoMapFragment extends BaseFragment {
                     }
 
                     @Override
-                    public void onError() {
-                        //
+                    public void onError(Exception e) {
+
                     }
                 });
 

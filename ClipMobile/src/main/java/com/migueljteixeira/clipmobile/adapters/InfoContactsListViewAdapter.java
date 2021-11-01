@@ -48,24 +48,24 @@ public class InfoContactsListViewAdapter extends ArrayAdapter<Object> {
                 convertView = LayoutInflater.from(mContext)
                         .inflate(R.layout.adapter_info_internal_contact, parent, false);
 
-                viewHolder.name = (TextView) convertView.findViewById(R.id.contact_name);
-                viewHolder.phone = (TextView) convertView.findViewById(R.id.contact_phone);
-                viewHolder.schedule = (TextView) convertView.findViewById(R.id.contact_schedule);
+                viewHolder.name = convertView.findViewById(R.id.contact_name);
+                viewHolder.phone = convertView.findViewById(R.id.contact_phone);
+                viewHolder.schedule = convertView.findViewById(R.id.contact_schedule);
             }
 
             else if(getItemViewType(position) == VIEW_TYPE_ITEM_CONTACT_EXTERNAL) {
                 convertView = LayoutInflater.from(mContext)
                         .inflate(R.layout.adapter_info_external_contact, parent, false);
 
-                viewHolder.name = (TextView) convertView.findViewById(R.id.contact_name);
-                viewHolder.phone = (TextView) convertView.findViewById(R.id.contact_phone);
+                viewHolder.name = convertView.findViewById(R.id.contact_name);
+                viewHolder.phone = convertView.findViewById(R.id.contact_phone);
             }
 
             else {
                 convertView = LayoutInflater.from(mContext)
                         .inflate(R.layout.adapter_info_contact_title, parent, false);
 
-                viewHolder.title = (TextView) convertView.findViewById(R.id.contact_title);
+                viewHolder.title = convertView.findViewById(R.id.contact_title);
             }
 
             convertView.setTag(viewHolder);

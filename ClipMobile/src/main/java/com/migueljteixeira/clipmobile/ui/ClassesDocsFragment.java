@@ -15,6 +15,8 @@ import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesDocsTask;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class ClassesDocsFragment extends BaseFragment
         super.onCreate(savedInstanceState);
 
         lastExpandedGroupPosition = -1;
-        classDocs = new LinkedList<StudentClassDoc>();
+        classDocs = new LinkedList<>();
     }
 
     @Override
@@ -44,7 +46,7 @@ public class ClassesDocsFragment extends BaseFragment
 //        ButterKnife.bind(this, view);
         super.bindHelperViews(view);
 
-        mListView = (ExpandableListView) view.findViewById(R.id.list_view);
+        mListView = binding.listView;
 
         return view;
     }
@@ -53,8 +55,13 @@ public class ClassesDocsFragment extends BaseFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        String[] strings = getResources().getStringArray(R.array.classes_docs_array);
+//        for (int i = 0; i < strings.length; i++) {
+//            strings[i] += " [heh]";
+//        }
+
         mListAdapter = new StudentClassesDocsAdapter(getActivity(),
-                getResources().getStringArray(R.array.classes_docs_array), classDocs);
+                strings, classDocs);
         mListView.setAdapter(mListAdapter);
         mListView.setOnGroupClickListener(onGroupClickListener);
         mListView.setOnChildClickListener(onChildClickListener);
@@ -83,7 +90,6 @@ public class ClassesDocsFragment extends BaseFragment
 
                 mDocsTask = new GetStudentClassesDocsTask(getActivity(), ClassesDocsFragment.this);
                 mDocsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, groupPosition);
-//                AndroidUtils.executeOnPool(mDocsTask, groupPosition);
             }
 
             return true;

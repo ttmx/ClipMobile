@@ -47,10 +47,10 @@ public class ScheduleListViewAdapter extends ArrayAdapter<Object> {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_schedule, parent, false);
 
             viewHolder = new ViewHolder();
-            viewHolder.name = (TextView) convertView.findViewById(R.id.class_name);
-            viewHolder.hour_start = (TextView) convertView.findViewById(R.id.class_hour_start);
-            viewHolder.hour_end = (TextView) convertView.findViewById(R.id.class_hour_end);
-            viewHolder.room = (TextView) convertView.findViewById(R.id.class_room);
+            viewHolder.name = convertView.findViewById(R.id.class_name);
+            viewHolder.hour_start = convertView.findViewById(R.id.class_hour_start);
+            viewHolder.hour_end = convertView.findViewById(R.id.class_hour_end);
+            viewHolder.room = convertView.findViewById(R.id.class_room);
 
             convertView.setTag(viewHolder);
         } else {

@@ -99,7 +99,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
     }
 
     public void setupNavDrawer() {
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout = findViewById(R.id.drawer_layout);
 
         // Setup menu adapter
         DrawerAdapter drawerAdapter = new DrawerAdapter(this);
@@ -113,7 +113,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
         drawerAdapter.add(new DrawerItem(getString(R.string.drawer_info_map), R.drawable.ic_map));
         drawerAdapter.add(new DrawerItem(getString(R.string.drawer_info_contacts), R.drawable.ic_phone));
 
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList = findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(drawerAdapter);
         mDrawerList.setItemChecked(MENU_ITEM_SCHEDULE_POSITION, true);
         mDrawerList.setOnItemClickListener(this);
