@@ -10,7 +10,7 @@ import com.migueljteixeira.clipmobile.util.StudentTools;
 
 public class ConnectClipTask extends BaseTask<String, Void, Result> {
 
-    private OnTaskFinishedListener<Result> mListener;
+    private final OnTaskFinishedListener<Result> mListener;
 
     public ConnectClipTask(Context context, OnTaskFinishedListener<Result> listener) {
         super(context);

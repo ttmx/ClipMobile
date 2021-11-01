@@ -2,6 +2,7 @@ package com.migueljteixeira.clipmobile.adapters;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CalendarViewPagerAdapter extends FragmentPagerAdapter {
     public static final String CALENDAR_TAG = "calendar_tag";
     private final String[] tabNames;
-    private Student student;
+    private final Student student;
 
     public CalendarViewPagerAdapter(FragmentManager fm, String[] tabNames, Student student) {
         super(fm);

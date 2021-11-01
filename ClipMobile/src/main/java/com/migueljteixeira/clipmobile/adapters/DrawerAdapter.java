@@ -18,7 +18,7 @@ public class DrawerAdapter extends ArrayAdapter<Object> {
     private static final int VIEW_TYPE_DIVIDER = 1;
     private static final int VIEW_TYPE_ITEM = 2;
 
-    private Context mContext;
+    private final Context mContext;
 
     public DrawerAdapter(Context context) {
         super(context, 0);

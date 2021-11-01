@@ -1,11 +1,12 @@
 package com.migueljteixeira.clipmobile.ui.dialogs;
 
 import android.os.Bundle;
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.DialogFragment;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.entities.StudentCalendar;

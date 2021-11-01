@@ -2,12 +2,11 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import com.migueljteixeira.clipmobile.R;
@@ -27,7 +26,6 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
 
     public static final String APPOINTMENT_TAG = "appointment_tag";
     private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    ;
     private List<StudentCalendar> calendar;
 
     @Override

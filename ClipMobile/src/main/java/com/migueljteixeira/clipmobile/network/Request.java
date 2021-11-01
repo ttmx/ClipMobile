@@ -2,7 +2,6 @@ package com.migueljteixeira.clipmobile.network;
 
 import android.content.Context;
 
-//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 

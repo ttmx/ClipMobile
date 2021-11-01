@@ -27,11 +27,11 @@ import java.util.Map;
 public class SelectionBuilder {
     private String mTable = null;
 
-    private Map<String, String> mProjectionMap = new HashMap<String, String>();
+    private final Map<String, String> mProjectionMap = new HashMap<String, String>();
 
-    private StringBuilder mSelection = new StringBuilder();
+    private final StringBuilder mSelection = new StringBuilder();
 
-    private ArrayList<String> mSelectionArgs = new ArrayList<String>();
+    private final ArrayList<String> mSelectionArgs = new ArrayList<String>();
 
     /**
      * Reset any internal state, allowing this builder to be recycled.

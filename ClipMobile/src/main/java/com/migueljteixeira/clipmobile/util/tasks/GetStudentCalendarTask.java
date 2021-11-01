@@ -9,7 +9,7 @@ import com.migueljteixeira.clipmobile.util.StudentTools;
 
 public class GetStudentCalendarTask extends BaseTask<Void, Void, Student> {
     
-    private OnTaskFinishedListener<Student> mListener;
+    private final OnTaskFinishedListener<Student> mListener;
     
     public GetStudentCalendarTask(Context context, OnTaskFinishedListener<Student> listener) {
         super(context);

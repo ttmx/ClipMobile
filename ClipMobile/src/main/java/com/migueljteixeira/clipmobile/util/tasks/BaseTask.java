@@ -10,12 +10,12 @@ public abstract class BaseTask<A,B,C> extends AsyncTask<A, B, C> {
 
     public interface OnTaskFinishedListener<C> {
 
-        public void onTaskFinished(C result);
+        void onTaskFinished(C result);
     }
 
     public interface OnUpdateTaskFinishedListener<C> {
 
-        public void onUpdateTaskFinished(C result);
+        void onUpdateTaskFinished(C result);
     }
 
     protected Context mContext;

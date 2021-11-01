@@ -9,7 +9,7 @@ import com.migueljteixeira.clipmobile.util.StudentTools;
 
 public class GetStudentClassesTask extends BaseTask<Void, Void, Student> {
     
-    private OnTaskFinishedListener<Student> mListener;
+    private final OnTaskFinishedListener<Student> mListener;
     
     public GetStudentClassesTask(Context context, OnTaskFinishedListener<Student> listener) {
         super(context);

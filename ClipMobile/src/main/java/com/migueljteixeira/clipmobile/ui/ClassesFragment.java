@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
 import androidx.fragment.app.Fragment;
@@ -56,22 +55,19 @@ public class ClassesFragment extends BaseFragment
         if (result == null) return;
 
         mListView.setAdapter(getAdapterItems(result));
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ListViewItem item = (ListViewItem) adapter.getItem(position);
+        mListView.setOnItemClickListener((parent, view, position, id) -> {
+            ListViewItem item = (ListViewItem) adapter.getItem(position);
 
-                // Save class selected and internal classId
-                ClipSettings.saveStudentClassSelected(getActivity(), item.number);
-                ClipSettings.saveStudentClassIdSelected(getActivity(), item.id);
+            // Save class selected and internal classId
+            ClipSettings.saveStudentClassSelected(getActivity(), item.number);
+            ClipSettings.saveStudentClassIdSelected(getActivity(), item.id);
 
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                Fragment fragment = new ClassesDocsFragment();
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            Fragment fragment = new ClassesDocsFragment();
 
-                // Replace current fragment by ClassesDocsFragment
-                fm.beginTransaction().replace(R.id.content_frame, fragment,
-                        ClassesDocsFragment.FRAGMENT_TAG).commit();
-            }
+            // Replace current fragment by ClassesDocsFragment
+            fm.beginTransaction().replace(R.id.content_frame, fragment,
+                    ClassesDocsFragment.FRAGMENT_TAG).commit();
         });
 
     }

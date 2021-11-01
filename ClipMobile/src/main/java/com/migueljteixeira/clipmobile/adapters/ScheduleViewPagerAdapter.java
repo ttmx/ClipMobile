@@ -17,7 +17,7 @@ import java.util.List;
 public class ScheduleViewPagerAdapter extends FragmentPagerAdapter {
     public static final String SCHEDULE_CLASSES_TAG = "schedule_classes_tag";
     private final String[] tabNames;
-    private Student student;
+    private final Student student;
 
     public ScheduleViewPagerAdapter(FragmentManager fm, String[] tabNames, Student student) {
         super(fm);

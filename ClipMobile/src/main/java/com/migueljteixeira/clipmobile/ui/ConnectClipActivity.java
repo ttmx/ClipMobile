@@ -3,7 +3,6 @@ package com.migueljteixeira.clipmobile.ui;
 import android.content.Intent;
 import android.os.Bundle;
 
-//import com.crashlytics.android.Crashlytics;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 

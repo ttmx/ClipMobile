@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
-//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleClassesColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleDaysColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentCalendarColumns;

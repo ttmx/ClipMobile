@@ -10,7 +10,6 @@ import android.widget.ExpandableListView;
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentClassesDocsAdapter;
 import com.migueljteixeira.clipmobile.databinding.FragmentStudentClassesDocsBinding;
-import com.migueljteixeira.clipmobile.databinding.FragmentStudentNumbersBinding;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;

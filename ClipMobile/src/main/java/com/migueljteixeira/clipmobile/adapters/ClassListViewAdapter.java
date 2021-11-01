@@ -11,7 +11,7 @@ import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.ui.ClassesFragment;
 
 public class ClassListViewAdapter extends ArrayAdapter<Object> {
-    private Context mContext;
+    private final Context mContext;
 
     public ClassListViewAdapter(Context context) {
         super(context, 0);

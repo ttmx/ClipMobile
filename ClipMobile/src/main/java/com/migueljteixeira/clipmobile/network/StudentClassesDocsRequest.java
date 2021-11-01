@@ -3,7 +3,6 @@ package com.migueljteixeira.clipmobile.network;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 
 import com.migueljteixeira.clipmobile.entities.Student;
@@ -79,10 +78,8 @@ public class StudentClassesDocsRequest extends Request {
         request.setTitle(name);
 
         // In order for this to run, you must use the android 3.2 to compile your app
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            request.allowScanningByMediaScanner();
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-        }
+        request.allowScanningByMediaScanner();
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, name);
 
         // Get download service and enqueue file

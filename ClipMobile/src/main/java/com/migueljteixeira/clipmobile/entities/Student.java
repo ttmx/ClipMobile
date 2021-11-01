@@ -1,5 +1,7 @@
 package com.migueljteixeira.clipmobile.entities;
 
+import android.util.Log;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,17 +11,17 @@ public class Student extends Entity {
     private String numberId; // number on URL
     private String number;   // real student number
     private List<StudentYearSemester> years;
-    private Map<Integer, List<StudentScheduleClass>> scheduleClasses; // <semester, scheduleClasses>
-    private Map<Integer, List<StudentClass>> studentClasses; // <semester, classes>
-    private Map<Boolean, List<StudentCalendar>> studentCalendar; // <isExam, calendar>
-    private List<StudentClassDoc> studentClassesDocs;
+    private final Map<Integer, List<StudentScheduleClass>> scheduleClasses; // <semester, scheduleClasses>
+    private final Map<Integer, List<StudentClass>> studentClasses; // <semester, classes>
+    private final Map<Boolean, List<StudentCalendar>> studentCalendar; // <isExam, calendar>
+    private final List<StudentClassDoc> studentClassesDocs;
 
     public Student(){
-        this.years = new LinkedList<StudentYearSemester>();
-        this.scheduleClasses = new HashMap<Integer, List<StudentScheduleClass>>(5);
-        this.studentClasses = new HashMap<Integer, List<StudentClass>>(2);
-        this.studentCalendar = new HashMap<Boolean, List<StudentCalendar>>(2);
-        this.studentClassesDocs = new LinkedList<StudentClassDoc>();
+        this.years = new LinkedList<>();
+        this.scheduleClasses = new HashMap<>(5);
+        this.studentClasses = new HashMap<>(2);
+        this.studentCalendar = new HashMap<>(2);
+        this.studentClassesDocs = new LinkedList<>();
     }
 
     public String getNumberId() {
@@ -61,11 +63,11 @@ public class Student extends Entity {
     public void addScheduleClass(int day, StudentScheduleClass scheduleClass) {
         List<StudentScheduleClass> classes = this.scheduleClasses.get(day);
         if(classes == null)
-            classes = new LinkedList<StudentScheduleClass>();
+            classes = new LinkedList<>();
 
         classes.add(scheduleClass);
 
-        System.out.println("--!!! dia: " + day + " , " + classes.size());
+        Log.d("Student","--!!! dia: " + day + " , " + classes.size());
 
         this.scheduleClasses.put(day, classes);
     }
@@ -77,7 +79,7 @@ public class Student extends Entity {
     public void addStudentClass(int semester, StudentClass scheduleClass) {
         List<StudentClass> classes = this.studentClasses.get(semester);
         if(classes == null)
-            classes = new LinkedList<StudentClass>();
+            classes = new LinkedList<>();
 
         classes.add(scheduleClass);
 
@@ -99,7 +101,7 @@ public class Student extends Entity {
     public void addStudentCalendarAppointment(boolean isExam, StudentCalendar calendarAppointment) {
         List<StudentCalendar> calendar = this.studentCalendar.get(isExam);
         if(calendar == null)
-            calendar = new LinkedList<StudentCalendar>();
+            calendar = new LinkedList<>();
 
         calendar.add(calendarAppointment);
 

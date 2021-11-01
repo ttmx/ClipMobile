@@ -2,10 +2,10 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.view.View;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
-import android.view.View;
 
 import com.migueljteixeira.clipmobile.R;
 

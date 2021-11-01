@@ -13,7 +13,7 @@ import com.migueljteixeira.clipmobile.ui.ScheduleFragment;
 public class ScheduleListViewAdapter extends ArrayAdapter<Object> {
     private static final int VIEW_TYPE_ITEM = 0;
     private static final int VIEW_TYPE_ITEM_EMPTY = 1;
-    private Context mContext;
+    private final Context mContext;
 
     public ScheduleListViewAdapter(Context context) {
         super(context, 0);

@@ -2,7 +2,6 @@ package com.migueljteixeira.clipmobile.network;
 
 import android.content.Context;
 
-//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentYearSemester;
 import com.migueljteixeira.clipmobile.entities.User;

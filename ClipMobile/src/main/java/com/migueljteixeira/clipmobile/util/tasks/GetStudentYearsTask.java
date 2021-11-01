@@ -10,10 +10,10 @@ public class GetStudentYearsTask extends BaseTask<Object, Void, Student> {
 
     public interface OnTaskFinishedListener {
 
-        public void onStudentYearsTaskFinished(Student resultCode, int groupPosition);
+        void onStudentYearsTaskFinished(Student resultCode, int groupPosition);
     }
 
-    private OnTaskFinishedListener mListener;
+    private final OnTaskFinishedListener mListener;
     private Integer groupPosition;
 
     public GetStudentYearsTask(Context context, OnTaskFinishedListener listener) {

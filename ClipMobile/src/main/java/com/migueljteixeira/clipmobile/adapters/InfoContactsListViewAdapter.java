@@ -14,7 +14,7 @@ public class InfoContactsListViewAdapter extends ArrayAdapter<Object> {
     private static final int VIEW_TYPE_ITEM_CONTACT_TITLE = 0;
     private static final int VIEW_TYPE_ITEM_CONTACT_INTERNAL = 1;
     private static final int VIEW_TYPE_ITEM_CONTACT_EXTERNAL = 2;
-    private Context mContext;
+    private final Context mContext;
 
     public InfoContactsListViewAdapter(Context context) {
         super(context, 0);

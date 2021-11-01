@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class User extends Entity {
-    private List<Student> students;
+    private final List<Student> students;
 
     public User() {
         students = new LinkedList<Student>();

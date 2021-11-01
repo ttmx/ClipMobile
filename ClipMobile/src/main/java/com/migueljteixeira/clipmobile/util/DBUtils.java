@@ -6,7 +6,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
-//import com.crashlytics.android.Crashlytics;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentCalendar;
 import com.migueljteixeira.clipmobile.entities.StudentClass;

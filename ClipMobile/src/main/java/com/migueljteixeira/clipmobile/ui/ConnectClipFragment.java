@@ -5,13 +5,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.databinding.FragmentActivityLoginBinding;
@@ -34,6 +32,7 @@ public class ConnectClipFragment extends BaseFragment
         mUsername = binding.username;
         mPassword = binding.password;
         mLogInButton = binding.logInButton;
+        super.bindHelperViews(root);
         return root;
     }
 

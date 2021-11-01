@@ -10,10 +10,10 @@ public class GetStudentNumbersTask extends BaseTask<Void, Void, User> {
 
     public interface OnTaskFinishedListener {
 
-        public void onStudentNumbersTaskFinished(User result);
+        void onStudentNumbersTaskFinished(User result);
     }
 
-    private OnTaskFinishedListener mListener;
+    private final OnTaskFinishedListener mListener;
 
     public GetStudentNumbersTask(Context context, OnTaskFinishedListener listener) {
         super(context);
