@@ -7,28 +7,30 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.migueljteixeira.clipmobile.R;
+import com.migueljteixeira.clipmobile.databinding.FragmentMapBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class InfoMapFragment extends BaseFragment {
 
-    @Bind(R.id.map) ImageView mImageView;
+    ImageView mImageView;
     private PhotoViewAttacher mAttacher;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
-        ButterKnife.bind(this, view);
+        FragmentMapBinding binding = FragmentMapBinding.inflate(inflater);
+        View view = binding.getRoot();
+//        ButterKnife.bind(this, view);
+        mImageView = binding.map;
+        super.bindHelperViews(binding.getRoot());
 
         showProgressSpinnerOnly(true);
 
         mAttacher = new PhotoViewAttacher(mImageView);
         mAttacher.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        
+
         Picasso.with(getActivity())
                 .load(R.drawable.map_campus)
                 .into(mImageView, new Callback() {
@@ -42,14 +44,14 @@ public class InfoMapFragment extends BaseFragment {
                         //
                     }
                 });
-        
+
         return view;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        
+
         mAttacher.cleanup();
     }
 }

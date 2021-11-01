@@ -17,22 +17,20 @@ import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClass;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesTask;
-//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 public class ClassesFragment extends BaseFragment
         implements GetStudentClassesTask.OnTaskFinishedListener<Student> {
-    
+
     private ListView mListView;
     private GetStudentClassesTask mTask;
     private ClassListViewAdapter adapter;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_classes, container, false);
-        ButterKnife.bind(this, view);
+//        ButterKnife.bind(this, view);
+        super.bindHelperViews(view);
 
         mListView = (ListView) view.findViewById(R.id.list_view);
 
@@ -49,13 +47,13 @@ public class ClassesFragment extends BaseFragment
 
     @Override
     public void onTaskFinished(Student result) {
-        if(!isAdded())
+        if (!isAdded())
             return;
 
         showProgressSpinner(false);
 
         // Server is unavailable right now
-        if(result == null) return;
+        if (result == null) return;
 
         mListView.setAdapter(getAdapterItems(result));
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

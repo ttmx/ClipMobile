@@ -9,20 +9,20 @@ import android.widget.ExpandableListView;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentClassesDocsAdapter;
+import com.migueljteixeira.clipmobile.databinding.FragmentStudentClassesDocsBinding;
+import com.migueljteixeira.clipmobile.databinding.FragmentStudentNumbersBinding;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesDocsTask;
-//import com.uwetrottmann.androidutils.AndroidUtils;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 
 public class ClassesDocsFragment extends BaseFragment
         implements GetStudentClassesDocsTask.OnTaskFinishedListener {
-    
+
     public static final String FRAGMENT_TAG = "classes_docs_tag";
     private int lastExpandedGroupPosition;
     private ExpandableListView mListView;
@@ -40,8 +40,10 @@ public class ClassesDocsFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_classes_docs, container, false);
-        ButterKnife.bind(this, view);
+        FragmentStudentClassesDocsBinding binding = FragmentStudentClassesDocsBinding.inflate(inflater);
+        View view = binding.getRoot();
+//        ButterKnife.bind(this, view);
+        super.bindHelperViews(view);
 
         mListView = (ExpandableListView) view.findViewById(R.id.list_view);
 
@@ -74,14 +76,14 @@ public class ClassesDocsFragment extends BaseFragment
     ExpandableListView.OnGroupClickListener onGroupClickListener = new ExpandableListView.OnGroupClickListener() {
         @Override
         public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-            if(mListView.isGroupExpanded(groupPosition))
+            if (mListView.isGroupExpanded(groupPosition))
                 mListView.collapseGroup(groupPosition);
 
             else {
                 showProgressSpinnerOnly(true);
 
                 mDocsTask = new GetStudentClassesDocsTask(getActivity(), ClassesDocsFragment.this);
-                mDocsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,groupPosition);
+                mDocsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, groupPosition);
 //                AndroidUtils.executeOnPool(mDocsTask, groupPosition);
             }
 
@@ -91,17 +93,17 @@ public class ClassesDocsFragment extends BaseFragment
 
     @Override
     public void onTaskFinished(Student result, int groupPosition) {
-        if(!isAdded())
+        if (!isAdded())
             return;
 
         showProgressSpinnerOnly(false);
 
         // Server is unavailable right now
-        if(result == null || result.getClassesDocs().size() == 0)
+        if (result == null || result.getClassesDocs().size() == 0)
             return;
 
         // Collapse last expanded group
-        if(lastExpandedGroupPosition != -1)
+        if (lastExpandedGroupPosition != -1)
             mListView.collapseGroup(lastExpandedGroupPosition);
 
         lastExpandedGroupPosition = groupPosition;

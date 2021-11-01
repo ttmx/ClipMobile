@@ -2,23 +2,20 @@ package com.migueljteixeira.clipmobile.ui;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.migueljteixeira.clipmobile.R;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import com.migueljteixeira.clipmobile.R;
+import com.migueljteixeira.clipmobile.databinding.FragmentViewpagerBinding;
 
 public class BaseViewPager extends Fragment {
 
-    @Bind(R.id.progress_spinner) FrameLayout mProgressSpinner;
-    @Bind(R.id.view_pager)
+    FrameLayout mProgressSpinner;
     ViewPager mViewPager;
     protected View view;
 
@@ -32,13 +29,14 @@ public class BaseViewPager extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_viewpager, container, false);
-        ButterKnife.bind(this, view);
+        FragmentViewpagerBinding binding = FragmentViewpagerBinding.inflate(inflater);
+        mViewPager = binding.viewPager;
+        mProgressSpinner = binding.getRoot().findViewById(R.id.progress_spinner);
 
         // Show progress spinner
         showProgressSpinnerOnly(true);
 
-        return view;
+        return binding.getRoot();
     }
 
     /**
@@ -52,7 +50,7 @@ public class BaseViewPager extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+//        ButterKnife.unbind(this);
 
     }
 

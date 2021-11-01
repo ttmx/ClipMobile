@@ -13,10 +13,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.databinding.ProgressSpinnerBinding;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 public class BaseFragment extends Fragment {
 
@@ -40,11 +37,11 @@ public class BaseFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void bindHelperViews(View view) {
+        if (view == null)
+            view = getView();
         mProgressSpinner = view.findViewById(R.id.progress_spinner);
         mMainView = view.findViewById(R.id.main_view);
-        super.onViewCreated(view, savedInstanceState);
     }
 
     /**
@@ -66,7 +63,7 @@ public class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
 
-        ButterKnife.unbind(this);
+//        ButterKnife.unbind(this);
     }
 
     protected void cancelTasks(AsyncTask mTask) {

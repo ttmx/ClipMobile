@@ -9,18 +9,19 @@ import android.widget.ListView;
 
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.InfoContactsListViewAdapter;
-
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import com.migueljteixeira.clipmobile.databinding.ListViewBinding;
 
 public class InfoContactsFragment extends BaseFragment {
 
-    @Bind(R.id.list_view) ListView mListView;
+    ListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_view, container, false);
-        ButterKnife.bind(this, view);
+        ListViewBinding binding = ListViewBinding.inflate(inflater);
+        View view = binding.getRoot();
+//        ButterKnife.bind(this, view);
+        mListView = binding.listView;
+        super.bindHelperViews(view);
 
         InfoContactsListViewAdapter adapter = new InfoContactsListViewAdapter(getActivity());
         Resources resources = getResources();
@@ -30,16 +31,16 @@ public class InfoContactsFragment extends BaseFragment {
 
         // Add 'internal contacts'
         String[] contacts = resources.getStringArray(R.array.info_contacts_internal);
-        for(int i=0; i<contacts.length; i+=3)
-            adapter.add(new ContactInternal(contacts[i], contacts[i+1], contacts[i+2]));
+        for (int i = 0; i < contacts.length; i += 3)
+            adapter.add(new ContactInternal(contacts[i], contacts[i + 1], contacts[i + 2]));
 
         // Set 'external contacts' title
         adapter.add(new ContactTitle(resources.getString(R.string.info_contacts_external_title)));
 
         // Add 'external contacts'
         contacts = resources.getStringArray(R.array.info_contacts_external);
-        for(int i=0; i<contacts.length; i+=2)
-            adapter.add(new ContactExternal(contacts[i], contacts[i+1]));
+        for (int i = 0; i < contacts.length; i += 2)
+            adapter.add(new ContactExternal(contacts[i], contacts[i + 1]));
 
         mListView.setAdapter(adapter);
         return view;
