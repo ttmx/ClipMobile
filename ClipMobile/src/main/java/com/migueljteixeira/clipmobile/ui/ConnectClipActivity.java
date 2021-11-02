@@ -24,10 +24,16 @@ public class ConnectClipActivity extends BaseActivity {
 //        Crashlytics.log("ConnectClipActivity - onCreate");
 
         // If the user has already login, start the StudentNumbersActivity instead
-        if( ClipSettings.isUserLoggedIn(this) ) {
+        if (ClipSettings.isUserLoggedIn(this)) {
 //            Crashlytics.log("ConnectClipActivity - user has already login");
-            
-            Intent intent = new Intent(this, StudentNumbersActivity.class);
+            Intent intent;
+            if (ClipSettings.getYearSelected(getApplicationContext()) == null) {
+                intent = new Intent(this, StudentNumbersActivity.class);
+            } else {
+                intent = new Intent(this, NavDrawerActivity.class);
+            }
+
+
             startActivity(intent);
 
             finish();
