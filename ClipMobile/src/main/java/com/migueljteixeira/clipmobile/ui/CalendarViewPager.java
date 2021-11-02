@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
 import com.astuetz.PagerSlidingTabStrip;
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.CalendarViewPagerAdapter;
@@ -18,7 +20,7 @@ public class CalendarViewPager extends BaseViewPager
     private GetStudentCalendarTask mTask;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = super.onCreateView(inflater, container, savedInstanceState);
 
         // Start AsyncTask

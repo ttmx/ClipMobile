@@ -16,11 +16,14 @@ import com.migueljteixeira.clipmobile.settings.ClipSettings;
 import com.migueljteixeira.clipmobile.ui.dialogs.CalendarDialogFragment;
 import com.squareup.timessquare.CalendarPickerView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 public class CalendarFragment extends Fragment implements CalendarPickerView.OnDateSelectedListener {
 
@@ -32,6 +35,7 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        assert getArguments() != null;
         calendar = getArguments().getParcelableArrayList(CalendarViewPagerAdapter.CALENDAR_TAG);
     }
 
@@ -40,7 +44,7 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
         CalendarPickerView calendar = view.findViewById(R.id.calendar_view);
 
         // Set calendar background color
-        Resources resources = getActivity().getResources();
+        Resources resources = requireActivity().getResources();
         calendar.setBackgroundColor(resources.getColor(R.color.main_background_color));
 
         // Set calendar start/end date and highlight dates
@@ -69,7 +73,7 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
                     // Create an instance of the dialog fragment and show it
                     DialogFragment dialog = new CalendarDialogFragment();
                     dialog.setArguments(bundle);
-                    dialog.show(getFragmentManager(), "CalendarDialogFragment");
+                    dialog.show(getParentFragmentManager(), "CalendarDialogFragment");
                 }
 
             } catch (ParseException e) {
@@ -83,7 +87,7 @@ public class CalendarFragment extends Fragment implements CalendarPickerView.OnD
     }
 
     private List<Date> getDatesToHighlight() {
-        List<Date> dates = new LinkedList<Date>();
+        List<Date> dates = new LinkedList<>();
 
         if (calendar == null)
             return dates;

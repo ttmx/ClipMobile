@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -91,7 +92,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
         outState.putString(CURRENT_FRAGMENT_TITLE_TAG, getTitle().toString());
@@ -237,13 +238,13 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
         super.onPostCreate(savedInstanceState);
 
         // If the device is bigger than 7', keep the drawer opened
-        if (getResources().getBoolean(R.bool.drawer_opened)) {
-            //mDrawerLayout.openDrawer(GravityCompat.START);
-            //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        } else {
+        if (!getResources().getBoolean(R.bool.drawer_opened)) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
             mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
+        //mDrawerLayout.openDrawer(GravityCompat.START);
+        //mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+
 
     }
 
@@ -342,7 +343,7 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
         cancelTasks(mUpdateTask);
     }
 
-    public class DrawerItem {
+    public static class DrawerItem {
 
         public String mTitle;
         public int mIconRes;
@@ -353,14 +354,14 @@ public class NavDrawerActivity extends BaseActivity implements AdapterView.OnIte
         }
     }
 
-    public class DrawerTitle extends DrawerItem {
+    public static class DrawerTitle extends DrawerItem {
 
         public DrawerTitle(String title) {
             super(title, 0);
         }
     }
 
-    public class DrawerDivider extends DrawerItem {
+    public static class DrawerDivider extends DrawerItem {
 
         public DrawerDivider() {
             super(null, 0);

@@ -91,12 +91,12 @@ public class StudentCalendarRequest extends Request {
             String hour = test.child(3).childNode(2).toString();
             List<TextNode> rooms = test.child(4).child(0).textNodes();
 
-            String rooms_final = "";
+            StringBuilder rooms_final = new StringBuilder();
             for(int i = 0; i<rooms.size(); i++) {
                 if(i == rooms.size()-1)
-                    rooms_final += rooms.get(i).getWholeText();
+                    rooms_final.append(rooms.get(i).getWholeText());
                 else
-                    rooms_final += rooms.get(i).getWholeText() + ", ";
+                    rooms_final.append(rooms.get(i).getWholeText()).append(", ");
             }
 
             StudentCalendar calendarAppointement = new StudentCalendar();
@@ -104,7 +104,7 @@ public class StudentCalendarRequest extends Request {
             calendarAppointement.setNumber(number);
             calendarAppointement.setDate(date);
             calendarAppointement.setHour(hour.substring(1, hour.length()-1 ));
-            calendarAppointement.setRooms(rooms_final);
+            calendarAppointement.setRooms(rooms_final.toString());
 
             student.addStudentCalendarAppointment(false, calendarAppointement);
         }

@@ -75,7 +75,7 @@ public class ClipMobileProvider extends ContentProvider {
         return matcher;
     }
 
-    private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<Boolean>();
+    private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<>();
 
     private ClipMobileDatabase mDbHelper;
 
@@ -240,7 +240,7 @@ public class ClipMobileProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int count = 0;
+        int count;
 
         if (!applyingBatch()) {
             final SQLiteDatabase db = mDbHelper.getWritableDatabase();
@@ -269,7 +269,7 @@ public class ClipMobileProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int count = 0;
+        int count;
 
         if (!applyingBatch()) {
             final SQLiteDatabase db = mDbHelper.getWritableDatabase();

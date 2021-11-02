@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentClassesDocsAdapter;
 import com.migueljteixeira.clipmobile.databinding.FragmentStudentClassesDocsBinding;
@@ -15,8 +17,6 @@ import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesDocsTask;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class ClassesDocsFragment extends BaseFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentStudentClassesDocsBinding binding = FragmentStudentClassesDocsBinding.inflate(inflater);
         View view = binding.getRoot();
 //        ButterKnife.bind(this, view);

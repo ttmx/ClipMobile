@@ -30,13 +30,7 @@ public class ExportCalendarDialogFragment extends DialogFragment {
 
         return new AlertDialog.Builder(getActivity())
                 .setTitle("Exportar para")
-                .setItems(calendarNames, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        StudentTools.exportCalendar(getActivity(), calendarIds[which]);
-                    }
-                }).create();
+                .setItems(calendarNames, (dialog, which) -> StudentTools.exportCalendar(getActivity(), calendarIds[which])).create();
     }
 
 }

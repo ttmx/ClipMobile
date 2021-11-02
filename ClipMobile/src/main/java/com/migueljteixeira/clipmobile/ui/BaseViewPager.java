@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -28,7 +29,7 @@ public class BaseViewPager extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentViewpagerBinding binding = FragmentViewpagerBinding.inflate(inflater);
         mViewPager = binding.viewPager;
         mProgressSpinner = binding.getRoot().findViewById(R.id.progress_spinner);
@@ -54,7 +55,7 @@ public class BaseViewPager extends Fragment {
 
     }
 
-    protected void cancelTasks(AsyncTask mTask) {
+    protected void cancelTasks(AsyncTask<?, ?, ?> mTask) {
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED)
             mTask.cancel(true);
     }

@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.databinding.FragmentMapBinding;
 import com.squareup.picasso.Callback;
@@ -19,7 +21,7 @@ public class InfoMapFragment extends BaseFragment {
     private PhotoViewAttacher mAttacher;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentMapBinding binding = FragmentMapBinding.inflate(inflater);
         View view = binding.getRoot();
 //        ButterKnife.bind(this, view);

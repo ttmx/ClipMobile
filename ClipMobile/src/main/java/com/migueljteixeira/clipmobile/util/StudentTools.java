@@ -323,7 +323,7 @@ public class StudentTools {
         // Submit the query and get a Cursor object back.
         Cursor cursor = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
 
-        Map<Long, String> calendars_names = new HashMap<Long, String>();
+        Map<Long, String> calendars_names = new HashMap<>();
         while (cursor.moveToNext()) {
             long calID;
             String displayName;
@@ -350,28 +350,25 @@ public class StudentTools {
 
     public static void exportCalendar(final Context mContext, final long calendarId) {
 
-        GetStudentCalendarTask mTask = new GetStudentCalendarTask(mContext, new BaseTask.OnTaskFinishedListener<Student>() {
-            @Override
-            public void onTaskFinished(Student result) {
+        GetStudentCalendarTask mTask = new GetStudentCalendarTask(mContext, result -> {
 
-                Map<Boolean, List<StudentCalendar>> calendar = result.getStudentCalendar();
+            Map<Boolean, List<StudentCalendar>> calendar = result.getStudentCalendar();
 
-                for (Map.Entry<Boolean, List<StudentCalendar>> event : calendar.entrySet()) {
-                    boolean isExam = event.getKey();
-                    List<StudentCalendar> calendarEvent = event.getValue();
+            for (Map.Entry<Boolean, List<StudentCalendar>> event : calendar.entrySet()) {
+                boolean isExam = event.getKey();
+                List<StudentCalendar> calendarEvent = event.getValue();
 
-                    for (StudentCalendar e : calendarEvent) {
-                        String name = e.getName();
-                        String date = e.getDate();
-                        String hour = e.getHour();
+                for (StudentCalendar e : calendarEvent) {
+                    String name = e.getName();
+                    String date = e.getDate();
+                    String hour = e.getHour();
 
-                        insertEvent(mContext, calendarId, isExam, name, date, hour);
-                    }
+                    insertEvent(mContext, calendarId, isExam, name, date, hour);
                 }
-
-                Toast.makeText(mContext, "Calendário exportado com sucesso!",
-                        Toast.LENGTH_LONG).show();
             }
+
+            Toast.makeText(mContext, "Calendário exportado com sucesso!",
+                    Toast.LENGTH_LONG).show();
         });
         mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 //        AndroidUtils.executeOnPool(mTask);

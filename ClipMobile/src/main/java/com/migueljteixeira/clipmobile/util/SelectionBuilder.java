@@ -13,6 +13,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,11 +29,11 @@ import java.util.Map;
 public class SelectionBuilder {
     private String mTable = null;
 
-    private final Map<String, String> mProjectionMap = new HashMap<String, String>();
+    private final Map<String, String> mProjectionMap = new HashMap<>();
 
     private final StringBuilder mSelection = new StringBuilder();
 
-    private final ArrayList<String> mSelectionArgs = new ArrayList<String>();
+    private final ArrayList<String> mSelectionArgs = new ArrayList<>();
 
     /**
      * Reset any internal state, allowing this builder to be recycled.
@@ -118,6 +120,7 @@ public class SelectionBuilder {
         }
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "SelectionBuilder[table=" + mTable + ", selection=" + getSelection()

@@ -34,7 +34,7 @@ public class StudentClassesRequest extends Request {
                 String classID  = class_url[class_url.length - 3];
 
                 String className = href.text();
-                int semester_final = Integer.valueOf(semester.substring(semester.length() - 1));
+                int semester_final = Integer.parseInt(semester.substring(semester.length() - 1));
                 String classID_final  = classID.substring(8);
 
                 System.out.println("-> CLASS!" + className + ", " + semester_final + ", " + classID_final);

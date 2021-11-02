@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.databinding.FragmentActivityLoginBinding;
 import com.migueljteixeira.clipmobile.enums.Result;
@@ -26,7 +28,7 @@ public class ConnectClipFragment extends BaseFragment
     private ConnectClipTask mTask;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentActivityLoginBinding binding = FragmentActivityLoginBinding.inflate(inflater);
         View root = binding.getRoot();
         mUsername = binding.username;

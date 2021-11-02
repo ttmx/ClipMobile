@@ -24,6 +24,7 @@ public class CalendarDialogFragment extends DialogFragment {
         // Hide title
         setStyle(STYLE_NO_TITLE, 0);
 
+        assert getArguments() != null;
         appointment = getArguments().getParcelable(CalendarFragment.APPOINTMENT_TAG);
     }
 

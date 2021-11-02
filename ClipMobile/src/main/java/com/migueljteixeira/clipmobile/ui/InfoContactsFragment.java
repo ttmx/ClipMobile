@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.InfoContactsListViewAdapter;
 import com.migueljteixeira.clipmobile.databinding.ListViewBinding;
@@ -16,7 +18,7 @@ public class InfoContactsFragment extends BaseFragment {
     ListView mListView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ListViewBinding binding = ListViewBinding.inflate(inflater);
         View view = binding.getRoot();
 //        ButterKnife.bind(this, view);

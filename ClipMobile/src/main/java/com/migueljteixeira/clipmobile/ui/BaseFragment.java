@@ -24,6 +24,7 @@ public class BaseFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View root = super.onCreateView(inflater, container, savedInstanceState);
+        assert root != null;
         mProgressSpinner = root.findViewById(R.id.progress_spinner);
         mMainView = root.findViewById(R.id.main_view);
         return root;
@@ -40,6 +41,7 @@ public class BaseFragment extends Fragment {
     public void bindHelperViews(View view) {
         if (view == null)
             view = getView();
+        assert view != null;
         mProgressSpinner = view.findViewById(R.id.progress_spinner);
         mMainView = view.findViewById(R.id.main_view);
     }
@@ -59,14 +61,7 @@ public class BaseFragment extends Fragment {
         mProgressSpinner.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-
-//        ButterKnife.unbind(this);
-    }
-
-    protected void cancelTasks(AsyncTask mTask) {
+    protected void cancelTasks(AsyncTask<?,?,?> mTask) {
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED)
             mTask.cancel(true);
     }

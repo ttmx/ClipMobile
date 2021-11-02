@@ -7,10 +7,6 @@ import io.github.inflationx.calligraphy3.CalligraphyConfig;
 import io.github.inflationx.calligraphy3.CalligraphyInterceptor;
 import io.github.inflationx.viewpump.ViewPump;
 
-//import com.uwetrottmann.androidutils.AndroidUtils;
-
-//import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
-
 public class ClipMobileApplication extends Application {
 
     public static String CONTENT_AUTHORITY;

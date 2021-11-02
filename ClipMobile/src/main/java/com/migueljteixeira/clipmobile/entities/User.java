@@ -7,7 +7,7 @@ public class User extends Entity {
     private final List<Student> students;
 
     public User() {
-        students = new LinkedList<Student>();
+        students = new LinkedList<>();
     }
 
     public List<Student> getStudents() {

@@ -3,6 +3,7 @@ package com.migueljteixeira.clipmobile.adapters;
 import android.os.Bundle;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -30,6 +31,7 @@ public class CalendarViewPagerAdapter extends FragmentPagerAdapter {
         return tabNames[position];
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         List<StudentCalendar> calendar = student.getStudentCalendar().get(position == 1);
@@ -50,8 +52,7 @@ public class CalendarViewPagerAdapter extends FragmentPagerAdapter {
 
         if(calendar != null) {
             // LinkedList to ArrayList 'conversion'
-            ArrayList<StudentCalendar> list = new ArrayList<StudentCalendar>();
-            list.addAll(calendar);
+            ArrayList<StudentCalendar> list = new ArrayList<>(calendar);
 
             bundle.putParcelableArrayList(CALENDAR_TAG, new ArrayList<Parcelable>(list));
         }

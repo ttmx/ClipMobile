@@ -2,7 +2,6 @@ package com.migueljteixeira.clipmobile.provider;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -15,19 +14,20 @@ import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentClasses
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentsColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentsYearSemesterColumns;
 import com.migueljteixeira.clipmobile.provider.ClipMobileContract.UsersColumns;
+import com.migueljteixeira.clipmobile.util.DBUtils;
 
 public class ClipMobileDatabase extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "clip_mobile_database";
     public static final int DATABASE_VERSION = 2;
 
-    private DatabaseUtils.InsertHelper mUsersInserter;
-    private DatabaseUtils.InsertHelper mStudentsInserter;
-    private DatabaseUtils.InsertHelper mStudentsYearSemesterInserter;
-    private DatabaseUtils.InsertHelper mScheduleDaysInserter;
-    private DatabaseUtils.InsertHelper mScheduleClassesInserter;
-    private DatabaseUtils.InsertHelper mStudentClassesInserter;
-    private DatabaseUtils.InsertHelper mStudentClassesDocsInserter;
-    private DatabaseUtils.InsertHelper mStudentCalendarInserter;
+    private DBUtils.InsertHelper mUsersInserter;
+    private DBUtils.InsertHelper mStudentsInserter;
+    private DBUtils.InsertHelper mStudentsYearSemesterInserter;
+    private DBUtils.InsertHelper mScheduleDaysInserter;
+    private DBUtils.InsertHelper mScheduleClassesInserter;
+    private DBUtils.InsertHelper mStudentClassesInserter;
+    private DBUtils.InsertHelper mStudentClassesDocsInserter;
+    private DBUtils.InsertHelper mStudentCalendarInserter;
 
     public interface Tables {
         String USERS = "users";
@@ -101,7 +101,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 
             + StudentsYearSemesterColumns.REF_STUDENTS_YEAR_SEMESTER_ID + " TEXT " +
-                References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
+            References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
 
             + ScheduleDaysColumns.DAY + " TEXT NOT NULL"
 
@@ -113,7 +113,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 
             + ScheduleDaysColumns.REF_SCHEDULE_DAYS_ID + " TEXT " +
-                References.STUDENT_SCHEDULE_DAY_ID + " ON DELETE CASCADE,"
+            References.STUDENT_SCHEDULE_DAY_ID + " ON DELETE CASCADE,"
 
             + ScheduleClassesColumns.NAME + " TEXT NOT NULL,"
 
@@ -135,7 +135,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 
             + StudentsYearSemesterColumns.REF_STUDENTS_YEAR_SEMESTER_ID + " TEXT " +
-                References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
+            References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
 
             + StudentClassesColumns.NAME + " TEXT NOT NULL,"
 
@@ -151,7 +151,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 
             + StudentClassesColumns.REF_STUDENT_CLASSES_ID + " TEXT " +
-                References.STUDENT_CLASSES_ID + " ON DELETE CASCADE,"
+            References.STUDENT_CLASSES_ID + " ON DELETE CASCADE,"
 
             + StudentClassesDocsColumns.NAME + " TEXT NOT NULL,"
 
@@ -171,7 +171,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 
             + StudentsYearSemesterColumns.REF_STUDENTS_YEAR_SEMESTER_ID + " TEXT " +
-                References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
+            References.STUDENTS_YEAR_SEMESTER_ID + " ON DELETE CASCADE,"
 
             + StudentCalendarColumns.IS_EXAM + " INTEGER,"
 
@@ -186,7 +186,6 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             + StudentCalendarColumns.NUMBER + " TEXT"
 
             + ");";
-
 
 
     public ClipMobileDatabase(Context context) {
@@ -246,15 +245,16 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             db.execSQL("PRAGMA foreign_keys=ON;");
         }
 
-        mUsersInserter = new DatabaseUtils.InsertHelper(db, Tables.USERS);
-        mStudentsInserter = new DatabaseUtils.InsertHelper(db, Tables.STUDENTS);
-        mStudentsYearSemesterInserter = new DatabaseUtils.InsertHelper(db, Tables.STUDENTS_YEAR_SEMESTER);
-        mScheduleDaysInserter = new DatabaseUtils.InsertHelper(db, Tables.SCHEDULE_DAYS);
-        mScheduleClassesInserter = new DatabaseUtils.InsertHelper(db, Tables.SCHEDULE_CLASSES);
-        mStudentClassesInserter = new DatabaseUtils.InsertHelper(db, Tables.STUDENT_CLASSES);
-        mStudentClassesDocsInserter = new DatabaseUtils.InsertHelper(db, Tables.STUDENT_CLASSES_DOCS);
-        mStudentCalendarInserter = new DatabaseUtils.InsertHelper(db, Tables.STUDENT_CALENDAR);
+        mUsersInserter = new DBUtils.InsertHelper(db, Tables.USERS);
+        mStudentsInserter = new DBUtils.InsertHelper(db, Tables.STUDENTS);
+        mStudentsYearSemesterInserter = new DBUtils.InsertHelper(db, Tables.STUDENTS_YEAR_SEMESTER);
+        mScheduleDaysInserter = new DBUtils.InsertHelper(db, Tables.SCHEDULE_DAYS);
+        mScheduleClassesInserter = new DBUtils.InsertHelper(db, Tables.SCHEDULE_CLASSES);
+        mStudentClassesInserter = new DBUtils.InsertHelper(db, Tables.STUDENT_CLASSES);
+        mStudentClassesDocsInserter = new DBUtils.InsertHelper(db, Tables.STUDENT_CLASSES_DOCS);
+        mStudentCalendarInserter = new DBUtils.InsertHelper(db, Tables.STUDENT_CALENDAR);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -263,7 +263,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
         if (oldVersion == 1) {
             upgradeToSecond(db);
         }
-        
+
     }
 
     private void upgradeToSecond(SQLiteDatabase db) {
@@ -275,7 +275,7 @@ public class ClipMobileDatabase extends SQLiteOpenHelper {
             db.execSQL("DROP TABLE IF EXISTS " + Tables.STUDENT_CLASSES);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.STUDENT_CLASSES_DOCS);
             db.execSQL("DROP TABLE IF EXISTS " + Tables.STUDENT_CALENDAR);
-            
+
             db.execSQL(CREATE_STUDENTS_YEAR_SEMESTER_TABLE);
             db.execSQL(CREATE_SCHEDULE_DAYS_TABLE);
             db.execSQL(CREATE_SCHEDULE_CLASSES_TABLE);

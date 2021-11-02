@@ -6,8 +6,8 @@
     android:versionName="2.0.0" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:minSdkVersion="26"
+        android:targetSdkVersion="30" />
 
     <application />
 

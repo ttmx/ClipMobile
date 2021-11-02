@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.adapters.StudentNumbersAdapter;
 import com.migueljteixeira.clipmobile.databinding.FragmentStudentNumbersBinding;
@@ -46,7 +48,7 @@ public class StudentNumbersFragment extends BaseFragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentStudentNumbersBinding binding = FragmentStudentNumbersBinding.inflate(inflater);
         mListView = binding.listView;
         super.bindHelperViews(binding.getRoot());
@@ -80,7 +82,7 @@ public class StudentNumbersFragment extends BaseFragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_student_numbers, menu);
     }
 

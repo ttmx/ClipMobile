@@ -29,7 +29,7 @@ public class BaseActivity extends AppCompatActivity {
         findViewById(R.id.toolbar_shadow).setVisibility(View.GONE);
     }
 
-    protected void cancelTasks(AsyncTask mTask) {
+    protected void cancelTasks(AsyncTask<?, ?, ?> mTask) {
         if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED)
             mTask.cancel(true);
     }
