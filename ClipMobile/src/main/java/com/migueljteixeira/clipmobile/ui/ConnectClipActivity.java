@@ -9,8 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import com.migueljteixeira.clipmobile.R;
 import com.migueljteixeira.clipmobile.settings.ClipSettings;
 
-//import io.fabric.sdk.android.Fabric;
-
 public class ConnectClipActivity extends BaseActivity {
 
     @Override

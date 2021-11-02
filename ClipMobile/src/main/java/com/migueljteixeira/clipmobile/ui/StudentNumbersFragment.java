@@ -153,7 +153,6 @@ public class StudentNumbersFragment extends BaseFragment
 
                 mYearsTask = new GetStudentYearsTask(getActivity(), StudentNumbersFragment.this);
                 mYearsTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, students.get(groupPosition), groupPosition);
-//                AndroidUtils.executeOnPool(mYearsTask, students.get(groupPosition), groupPosition);
             }
 
             return true;

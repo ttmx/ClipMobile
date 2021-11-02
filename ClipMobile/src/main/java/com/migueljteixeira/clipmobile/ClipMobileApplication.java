@@ -36,7 +36,6 @@ public class ClipMobileApplication extends Application {
         enableStrictMode();
     }
 
-    //    @SuppressLint("NewApi")
     private void enableStrictMode() {
         if (!BuildConfig.DEBUG)
             return;
@@ -49,7 +48,6 @@ public class ClipMobileApplication extends Application {
         final StrictMode.VmPolicy.Builder vmPolicyBuilder = new StrictMode.VmPolicy.Builder();
         vmPolicyBuilder.detectAll();
         vmPolicyBuilder.penaltyLog();
-//        if (AndroidUtils.isJellyBeanOrHigher())
         vmPolicyBuilder.detectLeakedRegistrationObjects();
 
         StrictMode.setVmPolicy(vmPolicyBuilder.build());
