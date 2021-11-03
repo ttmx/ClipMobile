@@ -40,8 +40,6 @@ public class ClassesFragment extends BaseFragment
         // Start AsyncTask
         mTask = new GetStudentClassesTask(getActivity(), ClassesFragment.this);
         mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-//        AndroidUtils.executeOnPool(mTask);
-
         return view;
     }
 

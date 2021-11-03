@@ -24,11 +24,6 @@ public class ClipMobileApplication extends Application {
                                 .build()))
                 .build());
 
-//        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-//                .setDefaultFontPath("Roboto-Regular.ttf")
-//                .setFontAttrId(R.attr.fontPath)
-//                .build());
-
         // Set provider authority
         CONTENT_AUTHORITY = getString(R.string.provider_authority);
 

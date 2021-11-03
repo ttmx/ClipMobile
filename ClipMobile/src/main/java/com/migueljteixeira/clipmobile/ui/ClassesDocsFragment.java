@@ -1,5 +1,6 @@
 package com.migueljteixeira.clipmobile.ui;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,10 @@ import com.migueljteixeira.clipmobile.adapters.StudentClassesDocsAdapter;
 import com.migueljteixeira.clipmobile.databinding.FragmentStudentClassesDocsBinding;
 import com.migueljteixeira.clipmobile.entities.Student;
 import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
+import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
 import com.migueljteixeira.clipmobile.network.StudentClassesDocsRequest;
+import com.migueljteixeira.clipmobile.settings.ClipSettings;
+import com.migueljteixeira.clipmobile.util.StudentTools;
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentClassesDocsTask;
 
 import java.util.LinkedList;
@@ -43,12 +47,50 @@ public class ClassesDocsFragment extends BaseFragment
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FragmentStudentClassesDocsBinding binding = FragmentStudentClassesDocsBinding.inflate(inflater);
         View view = binding.getRoot();
-//        ButterKnife.bind(this, view);
         super.bindHelperViews(view);
 
         mListView = binding.listView;
 
         return view;
+    }
+
+    private static class GreedyRunnable implements Runnable {
+
+        Context mContext;
+        int g;
+        public GreedyRunnable(Context mContext, int g){
+            this.mContext = mContext;
+            this.g = g;
+        }
+
+        @Override
+        public void run() {
+            String yearFormatted = ClipSettings.getYearSelectedFormatted(mContext);
+            int semester = ClipSettings.getSemesterSelected(mContext);
+            String studentNumberId = ClipSettings.getStudentNumberidSelected(mContext);
+            String studentClassIdSelected = ClipSettings.getStudentClassIdSelected(mContext);
+            String studentClassSelected = ClipSettings.getStudentClassSelected(mContext);
+            String docType = mContext.getResources()
+                    .getStringArray(R.array.classes_docs_type_array)[g];
+            try {
+                StudentTools.getStudentClassesDocs(mContext, studentClassIdSelected, yearFormatted,
+                        semester, studentNumberId, studentClassSelected, docType);
+            } catch (ServerUnavailableException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void greedyLoadFiles(){
+        Runnable runnable;
+
+        for (int i = 0; i < requireContext().getResources()
+                .getStringArray(R.array.classes_docs_type_array).length; i++) {
+
+            runnable = new GreedyRunnable(requireContext(),i);
+            AsyncTask.execute(runnable);
+        }
     }
 
     @Override
@@ -59,6 +101,8 @@ public class ClassesDocsFragment extends BaseFragment
 //        for (int i = 0; i < strings.length; i++) {
 //            strings[i] += " [heh]";
 //        }
+        greedyLoadFiles();
+
 
         mListAdapter = new StudentClassesDocsAdapter(getActivity(),
                 strings, classDocs);
