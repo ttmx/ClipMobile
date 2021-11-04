@@ -17,6 +17,7 @@ object DBUtils {
             ClipMobileContract.Users.CONTENT_URI, arrayOf(ClipMobileContract.Users._ID),
             ClipMobileContract.Users.USERNAME + "=?", arrayOf(username), null
         )
+
         if (userCursor!!.count == 0) {
             userCursor.close()
             return -1

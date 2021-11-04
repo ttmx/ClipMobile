@@ -29,8 +29,10 @@ import com.migueljteixeira.clipmobile.util.DBUtils.insertStudentClassesDocs
 import com.migueljteixeira.clipmobile.util.DBUtils.insertStudentSchedule
 import com.migueljteixeira.clipmobile.util.DBUtils.insertStudentYears
 import com.migueljteixeira.clipmobile.util.DBUtils.insertStudentsNumbers
+import com.migueljteixeira.clipmobile.util.tasks.BaseTask
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentCalendarTask
 import java.util.*
+
 
 object StudentTools {
     fun isNetworkConnected(mContext: Context): Boolean {
@@ -41,7 +43,7 @@ object StudentTools {
 
     @JvmStatic
     @Throws(ServerUnavailableException::class)
-    fun signIn(mContext: Context, username: String?, password: String?): Result {
+    fun signIn(mContext: Context, username: String, password: String): Result {
 
         // Check for connectivity
         if (!isNetworkConnected(mContext)) return Result.OFFLINE
@@ -78,10 +80,10 @@ object StudentTools {
     @Throws(ServerUnavailableException::class)
     fun getStudentsYears(
         mContext: Context,
-        studentId: String?,
-        studentNumberId: String?
+        studentId: String,
+        studentNumberId: String
     ): Student? {
-        var student = getStudentYears(mContext, studentId!!)
+        var student = getStudentYears(mContext, studentId)
         println("has " + student.hasStudentYears())
         if (student.hasStudentYears()) return student
         println("net " + !isNetworkConnected(mContext))
@@ -99,7 +101,7 @@ object StudentTools {
 
     @JvmStatic
     @Throws(ServerUnavailableException::class)
-    fun updateStudentNumbersAndYears(mContext: Context?, userId: Long): User {
+    fun updateStudentNumbersAndYears(mContext: Context, userId: Long): User {
         println("request!")
 
         // Get (new) studentsNumbers from the server
@@ -118,8 +120,8 @@ object StudentTools {
     @JvmStatic
     @Throws(ServerUnavailableException::class)
     fun updateStudentPage(
-        mContext: Context?, studentId: String?, studentNumberId: String?,
-        studentYearSemesterId: String?
+        mContext: Context, studentId: String, studentNumberId: String,
+        studentYearSemesterId: String
     ): Student {
         println("request!")
 
@@ -128,7 +130,7 @@ object StudentTools {
         println("deleting!")
 
         // Delete students info
-        deleteStudentsInfo(mContext!!, studentYearSemesterId)
+        deleteStudentsInfo(mContext, studentYearSemesterId)
         println("inserting!")
 
         // Insert students info
@@ -142,12 +144,12 @@ object StudentTools {
     @JvmStatic
     @Throws(ServerUnavailableException::class)
     fun getStudentSchedule(
-        mContext: Context, studentId: String?, year: String?, yearFormatted: String?,
-        semester: Int, studentNumberId: String?
+        mContext: Context, studentId: String, year: String, yearFormatted: String,
+        semester: Int, studentNumberId: String
     ): Student? {
 
         // First, we get the yearSemesterId
-        val yearSemesterId = getYearSemesterId(mContext, studentId!!, year!!, semester)
+        val yearSemesterId = getYearSemesterId(mContext, studentId, year, semester)
         var student = getStudentSchedule(mContext, yearSemesterId!!)
         println("has " + (student != null))
         if (student != null) return student
@@ -173,12 +175,12 @@ object StudentTools {
     @JvmStatic
     @Throws(ServerUnavailableException::class)
     fun getStudentClasses(
-        mContext: Context, studentId: String?, year: String?, yearFormatted: String?,
-        semester: Int, studentNumberId: String?
+        mContext: Context, studentId: String, year: String, yearFormatted: String,
+        semester: Int, studentNumberId: String
     ): Student? {
 
         // First, we get the yearSemesterId
-        val yearSemesterId = getYearSemesterId(mContext, studentId!!, year!!, semester)
+        val yearSemesterId = getYearSemesterId(mContext, studentId, year, semester)
         var student = getStudentClasses(mContext, yearSemesterId!!)
         println("has " + (student != null))
         if (student != null) return student
@@ -200,9 +202,9 @@ object StudentTools {
     @JvmStatic
     @Throws(ServerUnavailableException::class)
     fun getStudentClassesDocs(
-        mContext: Context, studentClassId: String?, yearFormatted: String?,
-        semester: Int, studentNumberId: String?, studentClassSelected: String?,
-        docType: String?
+        mContext: Context, studentClassId: String, yearFormatted: String,
+        semester: Int, studentNumberId: String, studentClassSelected: String,
+        docType: String
     ): Student? {
         var student = getStudentClassesDocs(mContext, studentClassId!!, docType!!)
         Log.d("StudentTools", "has " + (student != null))
@@ -231,8 +233,8 @@ object StudentTools {
     @JvmStatic
     @Throws(ServerUnavailableException::class)
     fun getStudentCalendar(
-        mContext: Context, studentId: String?, year: String?, yearFormatted: String?,
-        semester: Int, studentNumberId: String?
+        mContext: Context, studentId: String, year: String, yearFormatted: String,
+        semester: Int, studentNumberId: String
     ): Student? {
 
         // First, we get the yearSemesterId
@@ -318,21 +320,25 @@ object StudentTools {
 
     @JvmStatic
     fun exportCalendar(mContext: Context, calendarId: Long) {
-        val mTask = GetStudentCalendarTask(mContext) { result: Student ->
-            val calendar = result.getStudentCalendar()
-            for ((isExam, calendarEvent) in calendar) {
-                for (e in calendarEvent) {
-                    val name = e.name!!
-                    val date = e.date!!
-                    val hour = e.hour!!
-                    insertEvent(mContext, calendarId, isExam, name, date, hour)
+        val mTask =
+            GetStudentCalendarTask(mContext, object : BaseTask.OnTaskFinishedListener<Student> {
+                override fun onTaskFinished(result: Student?) {
+                    val calendar = result!!.getStudentCalendar()
+                    for ((isExam, calendarEvent) in calendar) {
+                        for (e in calendarEvent) {
+                            val name: String = e.name!!
+                            val date: String = e.date!!
+                            val hour: String = e.hour!!
+                            insertEvent(mContext, calendarId, isExam, name, date, hour)
+                        }
+                    }
+                    Toast.makeText(
+                        mContext, "Calendário exportado com sucesso!",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
-            }
-            Toast.makeText(
-                mContext, "Calendário exportado com sucesso!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
+            })
+
         mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         //        AndroidUtils.executeOnPool(mTask);
     }

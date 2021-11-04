@@ -1,24 +1,16 @@
-package com.migueljteixeira.clipmobile.entities;
+package com.migueljteixeira.clipmobile.entities
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*
 
-public class User extends Entity {
-    private final List<Student> students;
 
-    public User() {
-        students = new LinkedList<>();
+class User : Entity() {
+    val students: MutableList<Student> = LinkedList()
+
+    fun addStudent(student: Student) {
+        students.add(student)
     }
 
-    public List<Student> getStudents() {
-        return students;
-    }
-
-    public void addStudent(Student student) {
-        students.add(student);
-    }
-
-    public boolean hasStudents() {
-        return !students.isEmpty();
+    fun hasStudents(): Boolean {
+        return students.isNotEmpty()
     }
 }

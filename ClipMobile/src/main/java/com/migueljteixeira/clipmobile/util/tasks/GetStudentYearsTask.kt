@@ -1,44 +1,30 @@
-package com.migueljteixeira.clipmobile.util.tasks;
+package com.migueljteixeira.clipmobile.util.tasks
 
-import android.content.Context;
+import android.content.Context
+import com.migueljteixeira.clipmobile.entities.Student
+import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException
+import com.migueljteixeira.clipmobile.util.StudentTools.getStudentsYears
 
-import com.migueljteixeira.clipmobile.entities.Student;
-import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
-import com.migueljteixeira.clipmobile.util.StudentTools;
-
-public class GetStudentYearsTask extends BaseTask<Object, Void, Student> {
-
-    public interface OnTaskFinishedListener {
-
-        void onStudentYearsTaskFinished(Student resultCode, int groupPosition);
+class GetStudentYearsTask(context: Context, private val mListener: OnTaskFinishedListener?) :
+    BaseTask<Any?, Void?, Student?>(context) {
+    interface OnTaskFinishedListener {
+        fun onStudentYearsTaskFinished(resultCode: Student?, groupPosition: Int)
     }
 
-    private final OnTaskFinishedListener mListener;
-    private Integer groupPosition;
-
-    public GetStudentYearsTask(Context context, OnTaskFinishedListener listener) {
-        super(context);
-        mListener = listener;
-    }
-
-    @Override
-    protected Student doInBackground(Object... params) {
-        Student student = (Student) params[0];
-        groupPosition = (Integer) params[1];
-        
-        try {
+    private var groupPosition: Int = -1
+    override fun doInBackground(vararg params: Any?): Student? {
+        val student = params[0] as Student
+        groupPosition = params[1] as Int
+        return try {
             // Get students years
-            return StudentTools.getStudentsYears(mContext, student.getId(), student.getNumberId());
-        } catch (ServerUnavailableException e) {
-            return null;
+            getStudentsYears(mContext, student.id!!, student.numberId!!)
+        } catch (e: ServerUnavailableException) {
+            null
         }
     }
 
-    @Override
-    protected void onPostExecute(Student result) {
-        super.onPostExecute(result);
-
-        if (mListener != null)
-            mListener.onStudentYearsTaskFinished(result, groupPosition);
+    override fun onPostExecute(result: Student?) {
+        super.onPostExecute(result)
+        mListener?.onStudentYearsTaskFinished(result, groupPosition)
     }
 }

@@ -7,14 +7,13 @@ import android.content.UriMatcher
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.*
 import com.migueljteixeira.clipmobile.provider.ClipMobileDatabase.Tables
 import com.migueljteixeira.clipmobile.util.SelectionBuilder
 
 class ClipMobileProvider : ContentProvider() {
     private val mApplyingBatch = ThreadLocal<Boolean?>()
     private var mDbHelper: ClipMobileDatabase? = null
-    protected var mDb: SQLiteDatabase? = null
+    private var mDb: SQLiteDatabase? = null
     override fun onCreate(): Boolean {
         val context = context
         sUriMatcher = buildUriMatcher(context)
@@ -32,22 +31,19 @@ class ClipMobileProvider : ContentProvider() {
         val query = builder
             .where(selection, selectionArgs)
             .query(db, projection, sortOrder)
-        if (query != null) {
-            query.setNotificationUri(context!!.contentResolver, uri)
-        }
+        query.setNotificationUri(context!!.contentResolver, uri)
         return query
     }
 
     override fun getType(uri: Uri): String? {
-        val match = sUriMatcher!!.match(uri)
-        return when (match) {
-            USERS -> Users.CONTENT_TYPE
-            STUDENTS -> Students.CONTENT_TYPE
-            STUDENTS_YEAR_SEMESTER -> StudentsYearSemester.CONTENT_TYPE
-            SCHEDULE_DAYS -> ScheduleDays.CONTENT_TYPE
-            SCHEDULE_CLASSES -> ScheduleClasses.CONTENT_TYPE
-            STUDENT_CLASSES -> StudentClasses.CONTENT_TYPE
-            STUDENT_CLASSES_DOCS -> StudentClassesDocs.CONTENT_TYPE
+        return when (sUriMatcher!!.match(uri)) {
+            USERS -> ClipMobileContract.Users.CONTENT_TYPE
+            STUDENTS -> ClipMobileContract.Students.CONTENT_TYPE
+            STUDENTS_YEAR_SEMESTER -> ClipMobileContract.StudentsYearSemester.CONTENT_TYPE
+            SCHEDULE_DAYS -> ClipMobileContract.ScheduleDays.CONTENT_TYPE
+            SCHEDULE_CLASSES -> ClipMobileContract.ScheduleClasses.CONTENT_TYPE
+            STUDENT_CLASSES -> ClipMobileContract.StudentClasses.CONTENT_TYPE
+            STUDENT_CLASSES_DOCS -> ClipMobileContract.StudentClassesDocs.CONTENT_TYPE
             STUDENT_CALENDAR -> ClipMobileContract.StudentCalendar.CONTENT_TYPE
             else -> throw UnsupportedOperationException("Unknown uri: $uri")
         }
@@ -74,62 +70,62 @@ class ClipMobileProvider : ContentProvider() {
     }
 
     private fun insertInTransaction(uri: Uri, values: ContentValues?): Uri? {
-        val newItemUri: Uri? = when (sUriMatcher!!.match(uri)) {
+        val newItemUri: Uri = when (sUriMatcher!!.match(uri)) {
             USERS -> {
                 val id = mDbHelper!!.insertUsers(values)
                 if (id < 0) {
                     return null
                 }
-                Users.buildUri(id.toString())
+                ClipMobileContract.Users.buildUri(id.toString())
             }
             STUDENTS -> {
                 val id = mDbHelper!!.insertStudents(values)
                 if (id < 0) {
                     return null
                 }
-                Students.buildUri(id.toString())
+                ClipMobileContract.Students.buildUri(id.toString())
             }
             STUDENTS_YEAR_SEMESTER -> {
                 val id = mDbHelper!!.insertStudentYears(values)
                 if (id < 0) {
                     return null
                 }
-                StudentsYearSemester.buildUri(id.toString())
+                ClipMobileContract.StudentsYearSemester.buildUri(id.toString())
             }
             SCHEDULE_DAYS -> {
                 val id = mDbHelper!!.insertScheduleDays(values)
                 if (id < 0) {
                     return null
                 }
-                ScheduleDays.buildUri(id.toString())
+                ClipMobileContract.ScheduleDays.buildUri(id.toString())
             }
             SCHEDULE_CLASSES -> {
                 val id = mDbHelper!!.insertScheduleClasses(values)
                 if (id < 0) {
                     return null
                 }
-                ScheduleClasses.buildUri(id.toString())
+                ClipMobileContract.ScheduleClasses.buildUri(id.toString())
             }
             STUDENT_CLASSES -> {
                 val id = mDbHelper!!.insertStudentClasses(values)
                 if (id < 0) {
                     return null
                 }
-                StudentClasses.buildUri(id.toString())
+                ClipMobileContract.StudentClasses.buildUri(id.toString())
             }
             STUDENT_CLASSES_DOCS -> {
                 val id = mDbHelper!!.insertStudentClassesDocs(values)
                 if (id < 0) {
                     return null
                 }
-                StudentClassesDocs.buildUri(id.toString())
+                ClipMobileContract.StudentClassesDocs.buildUri(id.toString())
             }
             STUDENT_CALENDAR -> {
                 val id = mDbHelper!!.insertStudentCalendar(values)
                 if (id < 0) {
                     return null
                 }
-                StudentCalendar.buildUri(id.toString())
+                ClipMobileContract.StudentCalendar.buildUri(id.toString())
             }
             else -> throw UnsupportedOperationException("Unknown uri: $uri")
         }

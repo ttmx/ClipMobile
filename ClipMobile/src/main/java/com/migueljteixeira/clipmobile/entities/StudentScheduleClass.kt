@@ -1,66 +1,60 @@
-package com.migueljteixeira.clipmobile.entities;
+package com.migueljteixeira.clipmobile.entities
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Parcelable
+import android.os.Parcel
+import android.os.Parcelable.Creator
+import com.migueljteixeira.clipmobile.entities.StudentScheduleClass
 
-public class StudentScheduleClass extends Entity implements Parcelable {
-    private String name, name_min, type, hour_start, hour_end, room;
+open class StudentScheduleClass : Entity, Parcelable {
+    var name: String? = null
+    var nameMin: String? = null
+    var type: String? = null
+    var hourStart: String? = null
+    var hourEnd: String? = null
+    var room: String? = null
 
-    public StudentScheduleClass() {}
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name;}
-
-    public String getNameMin() { return name_min; }
-    public void setNameMin(String name_min) { this.name_min = name_min; }
-
-    public String getType() { return type; }
-    public void setType(String type) { this.type = type; }
-
-    public String getHourStart() { return hour_start; }
-    public void setHourStart(String hour_start) { this.hour_start = hour_start; }
-
-    public String getHourEnd() { return hour_end; }
-    public void setHourEnd(String hour_end) { this.hour_end = hour_end; }
-
-    public String getRoom() { return room; }
-    public void setRoom(String room) {this.room = room; }
-
-    protected StudentScheduleClass(Parcel in) {
-        name = in.readString();
-        name_min = in.readString();
-        type = in.readString();
-        hour_start = in.readString();
-        hour_end = in.readString();
-        room = in.readString();
+    constructor() {}
+    protected constructor(`in`: Parcel) {
+        name = `in`.readString()
+        nameMin = `in`.readString()
+        type = `in`.readString()
+        hourStart = `in`.readString()
+        hourEnd = `in`.readString()
+        room = `in`.readString()
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    override fun describeContents(): Int {
+        return 0
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(name_min);
-        dest.writeString(type);
-        dest.writeString(hour_start);
-        dest.writeString(hour_end);
-        dest.writeString(room);
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(name)
+        dest.writeString(nameMin)
+        dest.writeString(type)
+        dest.writeString(hourStart)
+        dest.writeString(hourEnd)
+        dest.writeString(room)
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<StudentScheduleClass> CREATOR = new Parcelable.Creator<StudentScheduleClass>() {
-        @Override
-        public StudentScheduleClass createFromParcel(Parcel in) {
-            return new StudentScheduleClass(in);
+//    companion object {
+//        val CREATOR: Creator<StudentScheduleClass> = object : Creator<StudentScheduleClass> {
+//            override fun createFromParcel(`in`: Parcel): StudentScheduleClass {
+//                return StudentScheduleClass(`in`)
+//            }
+//
+//            override fun newArray(size: Int): Array<StudentScheduleClass?> {
+//                return arrayOfNulls(size)
+//            }
+//        }
+//    }
+
+    companion object CREATOR : Creator<StudentScheduleClass> {
+        override fun createFromParcel(parcel: Parcel): StudentScheduleClass {
+            return StudentScheduleClass(parcel)
         }
 
-        @Override
-        public StudentScheduleClass[] newArray(int size) {
-            return new StudentScheduleClass[size];
+        override fun newArray(size: Int): Array<StudentScheduleClass?> {
+            return arrayOfNulls(size)
         }
-    };
-
+    }
 }

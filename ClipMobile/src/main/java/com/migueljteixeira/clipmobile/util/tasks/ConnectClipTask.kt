@@ -1,52 +1,39 @@
-package com.migueljteixeira.clipmobile.util.tasks;
+package com.migueljteixeira.clipmobile.util.tasks
 
-import android.content.Context;
-import android.widget.Toast;
+import android.content.Context
+import android.widget.Toast
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.enums.Result
+import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException
+import com.migueljteixeira.clipmobile.util.StudentTools.signIn
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.enums.Result;
-import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
-import com.migueljteixeira.clipmobile.util.StudentTools;
-
-public class ConnectClipTask extends BaseTask<String, Void, Result> {
-
-    private final OnTaskFinishedListener<Result> mListener;
-
-    public ConnectClipTask(Context context, OnTaskFinishedListener<Result> listener) {
-        super(context);
-        mListener = listener;
-    }
-
-    @Override
-    protected Result doInBackground(String... params) {
+class ConnectClipTask(context: Context?, private val mListener: OnTaskFinishedListener<Result>?) :
+    BaseTask<String?, Void?, Result?>(
+        context!!
+    ) {
+    override fun doInBackground(vararg params: String?): Result? {
         // Get user data
-        String username = params[0];
-        String password = params[1];
-
-        try {
-            return StudentTools.signIn(mContext, username, password);
-        } catch (ServerUnavailableException e) {
-            return Result.OFFLINE;
+        val username = params[0]!!
+        val password = params[1]!!
+        return try {
+            signIn(mContext, username, password)
+        } catch (e: ServerUnavailableException) {
+            Result.OFFLINE
         }
     }
 
-    @Override
-    protected void onPostExecute(Result result) {
-        super.onPostExecute(result);
-
-        switch(result) {
-            case OFFLINE:
-                Toast.makeText(mContext,
-                        mContext.getString(R.string.connection_failed), Toast.LENGTH_SHORT).show();
-                break;
-
-            case ERROR:
-                Toast.makeText(mContext,
-                        mContext.getString(R.string.error_fields_incorrect), Toast.LENGTH_SHORT).show();
-                break;
+    override fun onPostExecute(result: Result?) {
+        super.onPostExecute(result)
+        when (result) {
+            Result.OFFLINE -> Toast.makeText(
+                mContext,
+                mContext.getString(R.string.connection_failed), Toast.LENGTH_SHORT
+            ).show()
+            Result.ERROR -> Toast.makeText(
+                mContext,
+                mContext.getString(R.string.error_fields_incorrect), Toast.LENGTH_SHORT
+            ).show()
         }
-
-        if (mListener != null)
-            mListener.onTaskFinished(result);
+        mListener?.onTaskFinished(result)
     }
 }

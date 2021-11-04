@@ -1,60 +1,54 @@
-package com.migueljteixeira.clipmobile.util.tasks;
+package com.migueljteixeira.clipmobile.util.tasks
 
-import android.content.Context;
+import android.content.Context
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.entities.Student
+import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getSemesterSelected
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getStudentClassIdSelected
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getStudentClassSelected
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getStudentNumberidSelected
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getYearSelectedFormatted
+import com.migueljteixeira.clipmobile.util.StudentTools.getStudentClassesDocs
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.entities.Student;
-import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException;
-import com.migueljteixeira.clipmobile.settings.ClipSettings;
-import com.migueljteixeira.clipmobile.util.StudentTools;
-
-public class GetStudentClassesDocsTask extends BaseTask<Integer, Void, Student> {
-
-    public interface OnTaskFinishedListener {
-
-        void onTaskFinished(Student result, int groupPosition);
+class GetStudentClassesDocsTask(context: Context?, private val mListener: OnTaskFinishedListener?) :
+    BaseTask<Int?, Void?, Student?>(
+        context!!
+    ) {
+    interface OnTaskFinishedListener {
+        fun onTaskFinished(result: Student?, groupPosition: Int)
     }
 
-    private Integer groupPosition;
-    private final OnTaskFinishedListener mListener;
-
-    public GetStudentClassesDocsTask(Context context, OnTaskFinishedListener listener) {
-        super(context);
-        mListener = listener;
-    }
-
-    @Override
-    protected Student doInBackground(Integer... params) {
-        groupPosition = params[0];
+    private var groupPosition: Int? = null
+    override fun doInBackground(vararg params: Int?): Student? {
+        groupPosition = params[0]
 
         //String studentId = ClipSettings.getStudentIdSelected(mContext);
-        String yearFormatted = ClipSettings.getYearSelectedFormatted(mContext);
-        int semester = ClipSettings.getSemesterSelected(mContext);
-        String studentNumberId = ClipSettings.getStudentNumberidSelected(mContext);
-        String studentClassIdSelected = ClipSettings.getStudentClassIdSelected(mContext);
-        String studentClassSelected = ClipSettings.getStudentClassSelected(mContext);
-        String docType = mContext.getResources()
-                .getStringArray(R.array.classes_docs_type_array)[groupPosition];
+        val yearFormatted = getYearSelectedFormatted(mContext)
+        val semester = getSemesterSelected(mContext)
+        val studentNumberId = getStudentNumberidSelected(mContext)
+        val studentClassIdSelected = getStudentClassIdSelected(mContext)
+        val studentClassSelected = getStudentClassSelected(mContext)
+        val docType = mContext.resources
+            .getStringArray(R.array.classes_docs_type_array)[groupPosition!!]
 
         /*System.out.println("DOINBACKGROUND -> studentID" + studentId + ", year:" + year
                 + ", semester:" + semester
                 + ", studentNumberID:" + studentNumberId);*/
 
         // Get student class docs
-        try {
-            return StudentTools.getStudentClassesDocs(mContext, studentClassIdSelected, yearFormatted,
-                    semester, studentNumberId, studentClassSelected, docType);
-        } catch (ServerUnavailableException e) {
-            return null;
+        return try {
+            getStudentClassesDocs(
+                mContext, studentClassIdSelected!!, yearFormatted,
+                semester, studentNumberId!!, studentClassSelected!!, docType
+            )
+        } catch (e: ServerUnavailableException) {
+            null
         }
     }
 
-    @Override
-    protected void onPostExecute(Student result) {
-        super.onPostExecute(result);
-
-        if (mListener != null)
-            mListener.onTaskFinished(result, groupPosition);
+    override fun onPostExecute(result: Student?) {
+        super.onPostExecute(result)
+        mListener?.onTaskFinished(result, groupPosition!!)
     }
-    
 }

@@ -1,209 +1,213 @@
-package com.migueljteixeira.clipmobile.settings;
+package com.migueljteixeira.clipmobile.settings
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import com.migueljteixeira.clipmobile.settings.ClipSettings
+import java.util.*
+import java.util.concurrent.TimeUnit
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
-public class ClipSettings {
-    private final static String COOKIE_NAME = "com.migueljteixeira.clipmobile.cookie";
-    private final static String LOGIN_TIME = "com.migueljteixeira.clipmobile.loggedInTime";
-
-    private final static String LOGGED_IN_USER_ID = "com.migueljteixeira.clipmobile.loggedInUserId";
-    private final static String LOGGED_IN_USER_NAME = "com.migueljteixeira.clipmobile.loggedInUserName";
-    private final static String LOGGED_IN_USER_PW = "com.migueljteixeira.clipmobile.loggedInUserPw";
-
-    private final static String STUDENT_ID_SELECTED = "com.migueljteixeira.clipmobile.studentIdSelected";
-    private final static String YEAR_SELECTED = "com.migueljteixeira.clipmobile.yearSelected";
-    private final static String SEMESTER_SELECTED = "com.migueljteixeira.clipmobile.semesterSelected";
-
-    private final static String STUDENT_NUMBERID_SELECTED = "com.migueljteixeira.clipmobile.studentNumberIdSelected";
-    private final static String STUDENT_YEARSEMESTER_ID_SELECTED = "com.migueljteixeira.clipmobile.studentYearSemesterIdSelected";
-
-    private final static String STUDENT_CLASS_ID_SELECTED = "com.migueljteixeira.clipmobile.studentClassIdSelected";
-    private final static String STUDENT_CLASS_SELECTED = "com.migueljteixeira.clipmobile.studentClassSelected";
-
-    private static SharedPreferences get(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context);
+object ClipSettings {
+    private const val COOKIE_NAME = "com.migueljteixeira.clipmobile.cookie"
+    private const val LOGIN_TIME = "com.migueljteixeira.clipmobile.loggedInTime"
+    private const val LOGGED_IN_USER_ID = "com.migueljteixeira.clipmobile.loggedInUserId"
+    private const val LOGGED_IN_USER_NAME = "com.migueljteixeira.clipmobile.loggedInUserName"
+    private const val LOGGED_IN_USER_PW = "com.migueljteixeira.clipmobile.loggedInUserPw"
+    private const val STUDENT_ID_SELECTED = "com.migueljteixeira.clipmobile.studentIdSelected"
+    private const val YEAR_SELECTED = "com.migueljteixeira.clipmobile.yearSelected"
+    private const val SEMESTER_SELECTED = "com.migueljteixeira.clipmobile.semesterSelected"
+    private const val STUDENT_NUMBERID_SELECTED =
+        "com.migueljteixeira.clipmobile.studentNumberIdSelected"
+    private const val STUDENT_YEARSEMESTER_ID_SELECTED =
+        "com.migueljteixeira.clipmobile.studentYearSemesterIdSelected"
+    private const val STUDENT_CLASS_ID_SELECTED =
+        "com.migueljteixeira.clipmobile.studentClassIdSelected"
+    private const val STUDENT_CLASS_SELECTED = "com.migueljteixeira.clipmobile.studentClassSelected"
+    private operator fun get(context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    private static SharedPreferences.Editor edit(Context context) {
-        return PreferenceManager.getDefaultSharedPreferences(context).edit();
+    private fun edit(context: Context): SharedPreferences.Editor {
+        return PreferenceManager.getDefaultSharedPreferences(context).edit()
     }
 
-    public static String getCookie(Context context) {
-        return get(context).getString(COOKIE_NAME, null);
+    fun getCookie(context: Context): String? {
+        return ClipSettings[context].getString(COOKIE_NAME, null)
     }
 
-    public static void saveCookie(Context context, String cookie) {
-        edit(context).putString(COOKIE_NAME, cookie).commit();
+    fun saveCookie(context: Context, cookie: String?) {
+        edit(context).putString(COOKIE_NAME, cookie).commit()
     }
 
-    public static void saveLoginTime(Context context) {
-        edit(context).putLong(LOGIN_TIME, new Date().getTime()).commit();
+    fun saveLoginTime(context: Context) {
+        edit(context).putLong(LOGIN_TIME, Date().time).commit()
     }
 
-    public static boolean isTimeForANewCookie(Context context) {
-        long currentTime = new Date().getTime();
-        long loginTime = get(context).getLong(LOGIN_TIME, -1);
-
-        long elapsedTime = currentTime - loginTime;
-//        Crashlytics.log("ClipSettings - newCookie? - loginTime:" + loginTime);
+    fun isTimeForANewCookie(context: Context): Boolean {
+        val currentTime = Date().time
+        val loginTime = ClipSettings[context].getLong(LOGIN_TIME, -1)
+        val elapsedTime = currentTime - loginTime
+        //        Crashlytics.log("ClipSettings - newCookie? - loginTime:" + loginTime);
 //        Crashlytics.log("ClipSettings - newCookie? - currentTime:" + currentTime);
-
-        int elapsedTimeInMinutes = (int) TimeUnit.MILLISECONDS.toMinutes(elapsedTime);
-//        Crashlytics.log("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
-        
-        System.out.println("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
+        val elapsedTimeInMinutes = TimeUnit.MILLISECONDS.toMinutes(elapsedTime)
+            .toInt()
+        //        Crashlytics.log("ClipSettings - newCookie? - elapsedTime:" + elapsedTimeInMinutes);
+        println("ClipSettings - newCookie? - elapsedTime:$elapsedTimeInMinutes")
 
         // If the elapsedTime >= 50min, we need to request a new cookie from the server
-        return elapsedTimeInMinutes >= 50;
+        return elapsedTimeInMinutes >= 50
     }
 
-    public static boolean isUserLoggedIn(Context context) {
-        return get(context).getLong(LOGGED_IN_USER_ID, -1) != -1;
+    @JvmStatic
+    fun isUserLoggedIn(context: Context): Boolean {
+        return ClipSettings[context].getLong(LOGGED_IN_USER_ID, -1) != -1L
     }
 
-    public static long getLoggedInUserId(Context context) {
-        return get(context).getLong(LOGGED_IN_USER_ID, -1);
+    @JvmStatic
+    fun getLoggedInUserId(context: Context): Long {
+        return ClipSettings[context].getLong(LOGGED_IN_USER_ID, -1)
     }
 
-    public static String getLoggedInUserName(Context context) {
-        return get(context).getString(LOGGED_IN_USER_NAME, null);
+    fun getLoggedInUserName(context: Context): String? {
+        return ClipSettings[context].getString(LOGGED_IN_USER_NAME, null)
     }
 
-    public static String getLoggedInUserPw(Context context) {
-        return get(context).getString(LOGGED_IN_USER_PW, null);
+    fun getLoggedInUserPw(context: Context): String? {
+        return ClipSettings[context].getString(LOGGED_IN_USER_PW, null)
     }
 
-    public static void setLoggedInUser(Context context, long id, String username, String password) {
-        edit(context).putLong(LOGGED_IN_USER_ID, id).commit();
+    fun setLoggedInUser(context: Context, id: Long, username: String?, password: String?) {
+        edit(context).putLong(LOGGED_IN_USER_ID, id).commit()
 
         // Save credentials
-        edit(context).putString(LOGGED_IN_USER_NAME, username).commit();
-        edit(context).putString(LOGGED_IN_USER_PW, password).commit();
+        edit(context).putString(LOGGED_IN_USER_NAME, username).commit()
+        edit(context).putString(LOGGED_IN_USER_PW, password).commit()
     }
 
-    public static void logoutUser(Context context) {
+    @JvmStatic
+    fun logoutUser(context: Context) {
 
         // Clear user personal data
-        edit(context).clear().commit();
+        edit(context).clear().commit()
     }
 
-    public static String getYearSelected(Context context) {
-        return get(context).getString(YEAR_SELECTED, null);
+    @JvmStatic
+    fun getYearSelected(context: Context): String? {
+        return ClipSettings[context].getString(YEAR_SELECTED, null)
     }
 
-    public static String getYearSelectedFormatted(Context context) {
-        String year = get(context).getString(YEAR_SELECTED, null);
-        String[] split = year.split("/"); // [ "2014", "15" ]
-
-        String chars = split[1]; // [ "15" ]
-
-        String newString = split[0].substring(0, chars.length()); // [ "20" ]
-        newString = newString.concat(chars); // [ "2015" ]
-
-        return newString;
+    @JvmStatic
+    fun getYearSelectedFormatted(context: Context): String {
+        val year = ClipSettings[context].getString(YEAR_SELECTED, null)
+        val split = year!!.split("/").toTypedArray() // [ "2014", "15" ]
+        val chars = split[1] // [ "15" ]
+        var newString = split[0].substring(0, chars.length) // [ "20" ]
+        newString += chars // [ "2015" ]
+        return newString
     }
 
-    public static void saveYearSelected(Context context, String yearSelected) {
-        edit(context).putString(YEAR_SELECTED, yearSelected).commit();
+    @JvmStatic
+    fun saveYearSelected(context: Context, yearSelected: String?) {
+        edit(context).putString(YEAR_SELECTED, yearSelected).commit()
     }
 
-    public static int getCurrentSemester() {
-        Calendar calendar = Calendar.getInstance();
-
-        int month = calendar.get(Calendar.MONTH);
-        if(month >= 2 && month <= 7) //  March <= month <= September
-            return 2;
-
-        return 1;
-    }
-
-    public static int getSemesterSelected(Context context) {
-        return get(context).getInt(SEMESTER_SELECTED, 1);
-    }
-
-    public static void saveSemesterSelected(Context context, int semesterSelected) {
-        edit(context).putInt(SEMESTER_SELECTED, semesterSelected).commit();
-    }
-
-    public static String getStudentNumberidSelected(Context context) {
-        return get(context).getString(STUDENT_NUMBERID_SELECTED, null);
-    }
-
-    public static void saveStudentNumberId(Context context, String numberId) {
-        edit(context).putString(STUDENT_NUMBERID_SELECTED, numberId).commit();
-    }
-
-    public static String getStudentYearSemesterIdSelected(Context context) {
-        return get(context).getString(STUDENT_YEARSEMESTER_ID_SELECTED, null);
-    }
-
-    public static void saveStudentYearSemesterIdSelected(Context context, String studentYearSemesterId) {
-        edit(context).putString(STUDENT_YEARSEMESTER_ID_SELECTED, studentYearSemesterId).commit();
-    }
-
-    public static String getStudentIdSelected(Context context) {
-        return get(context).getString(STUDENT_ID_SELECTED, null);
-    }
-
-    public static void saveStudentIdSelected(Context context, String studentId) {
-        edit(context).putString(STUDENT_ID_SELECTED, studentId).commit();
-    }
-
-    public static String getStudentClassIdSelected(Context context) {
-        return get(context).getString(STUDENT_CLASS_ID_SELECTED, null);
-    }
-
-    public static void saveStudentClassIdSelected(Context context, String classId) {
-        edit(context).putString(STUDENT_CLASS_ID_SELECTED, classId).commit();
-    }
-
-    public static String getStudentClassSelected(Context context) {
-        return get(context).getString(STUDENT_CLASS_SELECTED, null);
-    }
-
-    public static void saveStudentClassSelected(Context context, String classNumber) {
-        edit(context).putString(STUDENT_CLASS_SELECTED, classNumber).commit();
-    }
-
-    public static Date getSemesterStartDate(Context context) {
-        int year = Integer.parseInt(ClipSettings.getYearSelectedFormatted(context));
-        int semester = ClipSettings.getSemesterSelected(context);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        
-        if(semester == 1) {
-            calendar.set(Calendar.MONTH, Calendar.SEPTEMBER);
-            calendar.set(Calendar.YEAR, year - 1);
-        } else {
-            calendar.set(Calendar.MONTH, Calendar.MARCH);
-            calendar.set(Calendar.YEAR, year);
+    //  March <= month <= September
+    val currentSemester: Int
+        get() {
+            val calendar = Calendar.getInstance()
+            val month = calendar[Calendar.MONTH]
+            return if (month in 2..7) 2 else 1
         }
 
-        return calendar.getTime();
+    @JvmStatic
+    fun getSemesterSelected(context: Context): Int {
+        return ClipSettings[context].getInt(SEMESTER_SELECTED, 1)
     }
 
-    public static Date getSemesterEndDate(Context context) {
-        int year = Integer.parseInt(ClipSettings.getYearSelectedFormatted(context));
-        int semester = ClipSettings.getSemesterSelected(context);
+    @JvmStatic
+    fun saveSemesterSelected(context: Context, semesterSelected: Int) {
+        edit(context).putInt(SEMESTER_SELECTED, semesterSelected).commit()
+    }
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-        
-        if(semester == 1) {
-            calendar.set(Calendar.MONTH, Calendar.APRIL);
-            calendar.set(Calendar.YEAR, year);
+    @JvmStatic
+    fun getStudentNumberidSelected(context: Context): String? {
+        return ClipSettings[context].getString(STUDENT_NUMBERID_SELECTED, null)
+    }
+
+    @JvmStatic
+    fun saveStudentNumberId(context: Context, numberId: String?) {
+        edit(context).putString(STUDENT_NUMBERID_SELECTED, numberId).commit()
+    }
+
+    @JvmStatic
+    fun getStudentYearSemesterIdSelected(context: Context): String? {
+        return ClipSettings[context].getString(STUDENT_YEARSEMESTER_ID_SELECTED, null)
+    }
+
+    @JvmStatic
+    fun saveStudentYearSemesterIdSelected(context: Context, studentYearSemesterId: String?) {
+        edit(context).putString(STUDENT_YEARSEMESTER_ID_SELECTED, studentYearSemesterId).commit()
+    }
+
+    @JvmStatic
+    fun getStudentIdSelected(context: Context): String? {
+        return ClipSettings[context].getString(STUDENT_ID_SELECTED, null)
+    }
+
+    @JvmStatic
+    fun saveStudentIdSelected(context: Context, studentId: String?) {
+        edit(context).putString(STUDENT_ID_SELECTED, studentId).commit()
+    }
+
+    @JvmStatic
+    fun getStudentClassIdSelected(context: Context): String? {
+        return ClipSettings[context].getString(STUDENT_CLASS_ID_SELECTED, null)
+    }
+
+    @JvmStatic
+    fun saveStudentClassIdSelected(context: Context, classId: String?) {
+        edit(context).putString(STUDENT_CLASS_ID_SELECTED, classId).commit()
+    }
+
+    @JvmStatic
+    fun getStudentClassSelected(context: Context): String? {
+        return ClipSettings[context].getString(STUDENT_CLASS_SELECTED, null)
+    }
+
+    @JvmStatic
+    fun saveStudentClassSelected(context: Context, classNumber: String?) {
+        edit(context).putString(STUDENT_CLASS_SELECTED, classNumber).commit()
+    }
+
+    @JvmStatic
+    fun getSemesterStartDate(context: Context): Date {
+        val year = getYearSelectedFormatted(context).toInt()
+        val semester = getSemesterSelected(context)
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.DAY_OF_MONTH] = 1
+        if (semester == 1) {
+            calendar[Calendar.MONTH] = Calendar.SEPTEMBER
+            calendar[Calendar.YEAR] = year - 1
         } else {
-            calendar.set(Calendar.MONTH, Calendar.OCTOBER);
-            calendar.set(Calendar.YEAR, year);
+            calendar[Calendar.MONTH] = Calendar.MARCH
+            calendar[Calendar.YEAR] = year
         }
+        return calendar.time
+    }
 
-        return calendar.getTime();
+    @JvmStatic
+    fun getSemesterEndDate(context: Context): Date {
+        val year = getYearSelectedFormatted(context).toInt()
+        val semester = getSemesterSelected(context)
+        val calendar = Calendar.getInstance()
+        calendar[Calendar.DAY_OF_MONTH] = 1
+        if (semester == 1) {
+            calendar[Calendar.MONTH] = Calendar.APRIL
+            calendar[Calendar.YEAR] = year
+        } else {
+            calendar[Calendar.MONTH] = Calendar.OCTOBER
+            calendar[Calendar.YEAR] = year
+        }
+        return calendar.time
     }
 }

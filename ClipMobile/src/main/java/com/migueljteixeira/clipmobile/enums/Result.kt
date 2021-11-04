@@ -1,6 +1,5 @@
-package com.migueljteixeira.clipmobile.enums;
+package com.migueljteixeira.clipmobile.enums
 
-public enum Result {
-    
+enum class Result {
     SUCCESS, ERROR, OFFLINE
 }
