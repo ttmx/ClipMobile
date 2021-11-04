@@ -1,110 +1,82 @@
-package com.migueljteixeira.clipmobile.entities;
+package com.migueljteixeira.clipmobile.entities
 
-import android.util.Log;
+import android.util.Log
+import java.util.*
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-public class Student extends Entity {
-    private String numberId; // number on URL
-    private String number;   // real student number
-    private List<StudentYearSemester> years;
-    private final Map<Integer, List<StudentScheduleClass>> scheduleClasses; // <semester, scheduleClasses>
-    private final Map<Integer, List<StudentClass>> studentClasses; // <semester, classes>
-    private final Map<Boolean, List<StudentCalendar>> studentCalendar; // <isExam, calendar>
-    private final List<StudentClassDoc> studentClassesDocs;
-
-    public Student(){
-        this.years = new LinkedList<>();
-        this.scheduleClasses = new HashMap<>(5);
-        this.studentClasses = new HashMap<>(2);
-        this.studentCalendar = new HashMap<>(2);
-        this.studentClassesDocs = new LinkedList<>();
+class Student : Entity() {
+    var numberId // number on URL
+            : String? = null
+    var number // real student number
+            : String? = null
+    private var years: MutableList<StudentYearSemester>
+    private val scheduleClasses // <semester, scheduleClasses>
+            : MutableMap<Int, MutableList<StudentScheduleClass>>
+    private val studentClasses // <semester, classes>
+            : MutableMap<Int, MutableList<StudentClass>>
+    private val studentCalendar // <isExam, calendar>
+            : MutableMap<Boolean, MutableList<StudentCalendar>>
+    private val studentClassesDocs: MutableList<StudentClassDoc>
+    fun getYears(): List<StudentYearSemester> {
+        return years
     }
 
-    public String getNumberId() {
-        return numberId;
+    fun setYears(years: MutableList<StudentYearSemester>) {
+        this.years = years
     }
 
-    public void setNumberId(String student_number_id) {
-        this.numberId = student_number_id;
+    fun addYear(year: StudentYearSemester) {
+        years.add(year)
     }
 
-    public String getNumber() {
-        return number;
+    fun hasStudentYears(): Boolean {
+        return years.isNotEmpty()
     }
 
-    public void setNumber(String student_number) {
-        this.number = student_number;
+    fun getScheduleClasses(): Map<Int, MutableList<StudentScheduleClass>> {
+        return scheduleClasses
     }
 
-    public List<StudentYearSemester> getYears() {
-        return years;
+    fun addScheduleClass(day: Int, scheduleClass: StudentScheduleClass) {
+        var classes = scheduleClasses[day]
+        if (classes == null) classes = LinkedList()
+        classes.add(scheduleClass)
+        Log.d("Student", "--!!! dia: " + day + " , " + classes.size)
+        scheduleClasses[day] = classes
     }
 
-    public void setYears(List<StudentYearSemester> years) {
-        this.years = years;
+    val classes: Map<Int, MutableList<StudentClass>>
+        get() = studentClasses
+
+    fun addStudentClass(semester: Int, scheduleClass: StudentClass) {
+        var classes = studentClasses[semester]
+        if (classes == null) classes = LinkedList()
+        classes.add(scheduleClass)
+        studentClasses[semester] = classes
     }
 
-    public void addYear(StudentYearSemester year) {
-        years.add(year);
+    val classesDocs: List<StudentClassDoc>
+        get() = studentClassesDocs
+
+    fun addClassDoc(classDoc: StudentClassDoc) {
+        studentClassesDocs.add(classDoc)
     }
 
-    public boolean hasStudentYears() {
-        return !years.isEmpty();
+    fun getStudentCalendar(): Map<Boolean, MutableList<StudentCalendar>> {
+        return studentCalendar
     }
 
-    public Map<Integer, List<StudentScheduleClass>> getScheduleClasses() {
-        return scheduleClasses;
+    fun addStudentCalendarAppointment(isExam: Boolean, calendarAppointment: StudentCalendar) {
+        var calendar = studentCalendar[isExam]
+        if (calendar == null) calendar = LinkedList()
+        calendar.add(calendarAppointment)
+        studentCalendar[isExam] = calendar
     }
 
-    public void addScheduleClass(int day, StudentScheduleClass scheduleClass) {
-        List<StudentScheduleClass> classes = this.scheduleClasses.get(day);
-        if(classes == null)
-            classes = new LinkedList<>();
-
-        classes.add(scheduleClass);
-
-        Log.d("Student","--!!! dia: " + day + " , " + classes.size());
-
-        this.scheduleClasses.put(day, classes);
-    }
-
-    public Map<Integer, List<StudentClass>> getClasses() {
-        return studentClasses;
-    }
-
-    public void addStudentClass(int semester, StudentClass scheduleClass) {
-        List<StudentClass> classes = this.studentClasses.get(semester);
-        if(classes == null)
-            classes = new LinkedList<>();
-
-        classes.add(scheduleClass);
-
-        this.studentClasses.put(semester, classes);
-    }
-
-    public List<StudentClassDoc> getClassesDocs() {
-        return studentClassesDocs;
-    }
-
-    public void addClassDoc(StudentClassDoc classDoc) {
-        studentClassesDocs.add(classDoc);
-    }
-
-    public Map<Boolean, List<StudentCalendar>> getStudentCalendar() {
-        return this.studentCalendar;
-    }
-
-    public void addStudentCalendarAppointment(boolean isExam, StudentCalendar calendarAppointment) {
-        List<StudentCalendar> calendar = this.studentCalendar.get(isExam);
-        if(calendar == null)
-            calendar = new LinkedList<>();
-
-        calendar.add(calendarAppointment);
-
-        this.studentCalendar.put(isExam, calendar);
+    init {
+        years = LinkedList()
+        scheduleClasses = HashMap(5)
+        studentClasses = HashMap(2)
+        studentCalendar = HashMap(2)
+        studentClassesDocs = LinkedList()
     }
 }

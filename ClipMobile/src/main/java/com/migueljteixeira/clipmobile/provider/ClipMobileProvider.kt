@@ -1,345 +1,281 @@
-package com.migueljteixeira.clipmobile.provider;
+package com.migueljteixeira.clipmobile.provider
 
-import android.content.ContentProvider;
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.Context
+import android.content.UriMatcher
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.net.Uri
+import com.migueljteixeira.clipmobile.provider.ClipMobileContract.*
+import com.migueljteixeira.clipmobile.provider.ClipMobileDatabase.Tables
+import com.migueljteixeira.clipmobile.util.SelectionBuilder
 
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleClasses;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.ScheduleDays;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentCalendar;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentClasses;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentClassesDocs;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.Students;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.StudentsYearSemester;
-import com.migueljteixeira.clipmobile.provider.ClipMobileContract.Users;
-import com.migueljteixeira.clipmobile.provider.ClipMobileDatabase.Tables;
-import com.migueljteixeira.clipmobile.util.SelectionBuilder;
-
-public class ClipMobileProvider extends ContentProvider {
-
-    private static UriMatcher sUriMatcher;
-
-    private static final int USERS = 1;
-
-    private static final int STUDENTS = 2;
-
-    private static final int STUDENTS_YEAR_SEMESTER = 3;
-
-    private static final int SCHEDULE_DAYS = 4;
-
-    private static final int SCHEDULE_CLASSES = 5;
-
-    private static final int STUDENT_CLASSES = 6;
-
-    private static final int STUDENT_CLASSES_DOCS = 7;
-
-    private static final int STUDENT_CALENDAR = 8;
-
-
-    /**
-     * Build and return a {@link UriMatcher} that catches all {@link Uri} variations supported by
-     * this {@link ContentProvider}.
-     */
-    private static UriMatcher buildUriMatcher(Context context) {
-        final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        final String authority = context.getPackageName() + ".provider";
-
-        // Users
-        matcher.addURI(authority, ClipMobileContract.PATH_USERS, USERS);
-
-        // Students
-        matcher.addURI(authority, ClipMobileContract.PATH_STUDENTS, STUDENTS);
-
-        // Students Year-Semester
-        matcher.addURI(authority, ClipMobileContract.PATH_STUDENTS_YEAR_SEMESTER, STUDENTS_YEAR_SEMESTER);
-
-        // Students Schedule Days
-        matcher.addURI(authority, ClipMobileContract.PATH_SCHEDULE_DAYS, SCHEDULE_DAYS);
-
-        // Students Schedule Classes
-        matcher.addURI(authority, ClipMobileContract.PATH_SCHEDULE_CLASSES, SCHEDULE_CLASSES);
-
-        // Student Classes
-        matcher.addURI(authority, ClipMobileContract.PATH_STUDENT_CLASSES, STUDENT_CLASSES);
-
-        // Student Classes Docs
-        matcher.addURI(authority, ClipMobileContract.PATH_STUDENT_CLASSES_DOCS, STUDENT_CLASSES_DOCS);
-
-        // Student Calendar
-        matcher.addURI(authority, ClipMobileContract.PATH_STUDENT_CALENDAR, STUDENT_CALENDAR);
-
-        return matcher;
+class ClipMobileProvider : ContentProvider() {
+    private val mApplyingBatch = ThreadLocal<Boolean?>()
+    private var mDbHelper: ClipMobileDatabase? = null
+    protected var mDb: SQLiteDatabase? = null
+    override fun onCreate(): Boolean {
+        val context = context
+        sUriMatcher = buildUriMatcher(context)
+        mDbHelper = ClipMobileDatabase(context)
+        return true
     }
 
-    private final ThreadLocal<Boolean> mApplyingBatch = new ThreadLocal<>();
-
-    private ClipMobileDatabase mDbHelper;
-
-    protected SQLiteDatabase mDb;
-
-    @Override
-    public boolean onCreate() {
-        Context context = getContext();
-
-        sUriMatcher = buildUriMatcher(context);
-
-        mDbHelper = new ClipMobileDatabase(context);
-
-        return true;
-    }
-
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-            String sortOrder) {
-
-        final SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        final int match = sUriMatcher.match(uri);
-
-        final SelectionBuilder builder = buildSelection(uri, match);
-
-        Cursor query = builder
-                .where(selection, selectionArgs)
-                .query(db, projection, sortOrder);
+    override fun query(
+        uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
+        val db = mDbHelper!!.readableDatabase
+        val match = sUriMatcher!!.match(uri)
+        val builder = buildSelection(uri, match)
+        val query = builder
+            .where(selection, selectionArgs)
+            .query(db, projection, sortOrder)
         if (query != null) {
-            query.setNotificationUri(getContext().getContentResolver(), uri);
+            query.setNotificationUri(context!!.contentResolver, uri)
         }
-        return query;
+        return query
     }
 
-    @Override
-    public String getType(Uri uri) {
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case USERS :
-                return Users.CONTENT_TYPE;
-            case STUDENTS :
-                return Students.CONTENT_TYPE;
-            case STUDENTS_YEAR_SEMESTER :
-                return StudentsYearSemester.CONTENT_TYPE;
-            case SCHEDULE_DAYS :
-                return ScheduleDays.CONTENT_TYPE;
-            case SCHEDULE_CLASSES :
-                return ScheduleClasses.CONTENT_TYPE;
-            case STUDENT_CLASSES :
-                return StudentClasses.CONTENT_TYPE;
-            case STUDENT_CLASSES_DOCS :
-                return StudentClassesDocs.CONTENT_TYPE;
-            case STUDENT_CALENDAR :
-                return StudentCalendar.CONTENT_TYPE;
-
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+    override fun getType(uri: Uri): String? {
+        val match = sUriMatcher!!.match(uri)
+        return when (match) {
+            USERS -> Users.CONTENT_TYPE
+            STUDENTS -> Students.CONTENT_TYPE
+            STUDENTS_YEAR_SEMESTER -> StudentsYearSemester.CONTENT_TYPE
+            SCHEDULE_DAYS -> ScheduleDays.CONTENT_TYPE
+            SCHEDULE_CLASSES -> ScheduleClasses.CONTENT_TYPE
+            STUDENT_CLASSES -> StudentClasses.CONTENT_TYPE
+            STUDENT_CLASSES_DOCS -> StudentClassesDocs.CONTENT_TYPE
+            STUDENT_CALENDAR -> ClipMobileContract.StudentCalendar.CONTENT_TYPE
+            else -> throw UnsupportedOperationException("Unknown uri: $uri")
         }
     }
 
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Uri newItemUri;
-
+    override fun insert(uri: Uri, values: ContentValues?): Uri? {
+        val newItemUri: Uri?
         if (!applyingBatch()) {
-            final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-            db.beginTransaction();
+            val db = mDbHelper!!.writableDatabase
+            db.beginTransaction()
             try {
-                newItemUri = insertInTransaction(uri, values);
-                db.setTransactionSuccessful();
+                newItemUri = insertInTransaction(uri, values)
+                db.setTransactionSuccessful()
             } finally {
-                db.endTransaction();
+                db.endTransaction()
             }
         } else {
-            newItemUri = insertInTransaction(uri, values);
+            newItemUri = insertInTransaction(uri, values)
         }
 
         /*if (newItemUri != null) {
             getContext().getContentResolver().notifyChange(uri, null);
-        }*/
-
-        return newItemUri;
+        }*/return newItemUri
     }
 
-    private Uri insertInTransaction(Uri uri, ContentValues values) {
-        Uri newItemUri = null;
-
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case USERS: {
-                long id = mDbHelper.insertUsers(values);
+    private fun insertInTransaction(uri: Uri, values: ContentValues?): Uri? {
+        val newItemUri: Uri? = when (sUriMatcher!!.match(uri)) {
+            USERS -> {
+                val id = mDbHelper!!.insertUsers(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = Users.buildUri(String.valueOf(id));
-
-                break;
+                Users.buildUri(id.toString())
             }
-            case STUDENTS: {
-                long id = mDbHelper.insertStudents(values);
+            STUDENTS -> {
+                val id = mDbHelper!!.insertStudents(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = Students.buildUri(String.valueOf(id));
-                break;
+                Students.buildUri(id.toString())
             }
-            case STUDENTS_YEAR_SEMESTER: {
-                long id = mDbHelper.insertStudentYears(values);
+            STUDENTS_YEAR_SEMESTER -> {
+                val id = mDbHelper!!.insertStudentYears(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = StudentsYearSemester.buildUri(String.valueOf(id));
-                break;
+                StudentsYearSemester.buildUri(id.toString())
             }
-            case SCHEDULE_DAYS: {
-                long id = mDbHelper.insertScheduleDays(values);
+            SCHEDULE_DAYS -> {
+                val id = mDbHelper!!.insertScheduleDays(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = ScheduleDays.buildUri(String.valueOf(id));
-                break;
+                ScheduleDays.buildUri(id.toString())
             }
-            case SCHEDULE_CLASSES: {
-                long id = mDbHelper.insertScheduleClasses(values);
+            SCHEDULE_CLASSES -> {
+                val id = mDbHelper!!.insertScheduleClasses(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = ScheduleClasses.buildUri(String.valueOf(id));
-                break;
+                ScheduleClasses.buildUri(id.toString())
             }
-            case STUDENT_CLASSES: {
-                long id = mDbHelper.insertStudentClasses(values);
+            STUDENT_CLASSES -> {
+                val id = mDbHelper!!.insertStudentClasses(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = StudentClasses.buildUri(String.valueOf(id));
-                break;
+                StudentClasses.buildUri(id.toString())
             }
-            case STUDENT_CLASSES_DOCS: {
-                long id = mDbHelper.insertStudentClassesDocs(values);
+            STUDENT_CLASSES_DOCS -> {
+                val id = mDbHelper!!.insertStudentClassesDocs(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = StudentClassesDocs.buildUri(String.valueOf(id));
-                break;
+                StudentClassesDocs.buildUri(id.toString())
             }
-            case STUDENT_CALENDAR: {
-                long id = mDbHelper.insertStudentCalendar(values);
+            STUDENT_CALENDAR -> {
+                val id = mDbHelper!!.insertStudentCalendar(values)
                 if (id < 0) {
-                    break;
+                    return null
                 }
-                newItemUri = StudentCalendar.buildUri(String.valueOf(id));
-                break;
+                StudentCalendar.buildUri(id.toString())
             }
-
-            default :
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+            else -> throw UnsupportedOperationException("Unknown uri: $uri")
         }
-
-        return newItemUri;
+        return newItemUri
     }
 
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int count;
-
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int {
+        val count: Int
         if (!applyingBatch()) {
-            final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-            db.beginTransaction();
+            val db = mDbHelper!!.writableDatabase
+            db.beginTransaction()
             try {
-                count = buildSelection(uri, sUriMatcher.match(uri))
-                        .where(selection, selectionArgs)
-                        .update(db, values);
-                db.setTransactionSuccessful();
+                count = buildSelection(uri, sUriMatcher!!.match(uri))
+                    .where(selection, selectionArgs)
+                    .update(db, values)
+                db.setTransactionSuccessful()
             } finally {
-                db.endTransaction();
+                db.endTransaction()
             }
         } else {
-            mDb = mDbHelper.getWritableDatabase();
-            count = buildSelection(uri, sUriMatcher.match(uri))
-                    .where(selection, selectionArgs)
-                    .update(mDb, values);
+            mDb = mDbHelper!!.writableDatabase
+            count = buildSelection(uri, sUriMatcher!!.match(uri))
+                .where(selection, selectionArgs)
+                .update(mDb!!, values)
         }
 
         /*if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
-        }*/
-
-        return count;
+        }*/return count
     }
 
-    @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int count;
-
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int {
+        val count: Int
         if (!applyingBatch()) {
-            final SQLiteDatabase db = mDbHelper.getWritableDatabase();
-            db.beginTransaction();
+            val db = mDbHelper!!.writableDatabase
+            db.beginTransaction()
             try {
-                count = buildSelection(uri, sUriMatcher.match(uri))
-                        .where(selection, selectionArgs)
-                        .delete(db);
-                db.setTransactionSuccessful();
+                count = buildSelection(uri, sUriMatcher!!.match(uri))
+                    .where(selection, selectionArgs)
+                    .delete(db)
+                db.setTransactionSuccessful()
             } finally {
-                db.endTransaction();
+                db.endTransaction()
             }
         } else {
-            mDb = mDbHelper.getWritableDatabase();
-            count = buildSelection(uri, sUriMatcher.match(uri))
-                    .where(selection, selectionArgs)
-                    .delete(mDb);
+            mDb = mDbHelper!!.writableDatabase
+            count = buildSelection(uri, sUriMatcher!!.match(uri))
+                .where(selection, selectionArgs)
+                .delete(mDb!!)
         }
 
         /*if (count > 0) {
             getContext().getContentResolver().notifyChange(uri, null);
-        }*/
-
-        return count;
+        }*/return count
     }
 
     /**
      * Allows users to do multiple inserts into a table using the same statement
      */
-    private boolean applyingBatch() {
-        return mApplyingBatch.get() != null && mApplyingBatch.get();
+    private fun applyingBatch(): Boolean {
+        return mApplyingBatch.get() != null && mApplyingBatch.get()!!
     }
 
-    /**
-     * Builds selection using a {@link SelectionBuilder} to match the requested {@link Uri}.
-     */
-    private static SelectionBuilder buildSelection(Uri uri, int match) {
-        final SelectionBuilder builder = new SelectionBuilder();
-
-        switch (match) {
-            case USERS :
-                return builder.table(Tables.USERS);
-            case STUDENTS :
-                return builder.table(Tables.STUDENTS);
-            case STUDENTS_YEAR_SEMESTER :
-                return builder.table(Tables.STUDENTS_YEAR_SEMESTER);
-            case SCHEDULE_DAYS :
-                return builder.table(Tables.SCHEDULE_DAYS);
-            case SCHEDULE_CLASSES :
-                return builder.table(Tables.SCHEDULE_CLASSES);
-            case STUDENT_CLASSES :
-                return builder.table(Tables.STUDENT_CLASSES);
-            case STUDENT_CLASSES_DOCS :
-                return builder.table(Tables.STUDENT_CLASSES_DOCS);
-            case STUDENT_CALENDAR :
-                return builder.table(Tables.STUDENT_CALENDAR);
-
-            default :
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+    override fun shutdown() {
+        super.shutdown()
+        if (mDbHelper != null) {
+            mDbHelper!!.close()
+            mDbHelper = null
+            mDb = null
         }
     }
 
-    @Override
-    public void shutdown() {
-        super.shutdown();
+    companion object {
+        private var sUriMatcher: UriMatcher? = null
+        private const val USERS = 1
+        private const val STUDENTS = 2
+        private const val STUDENTS_YEAR_SEMESTER = 3
+        private const val SCHEDULE_DAYS = 4
+        private const val SCHEDULE_CLASSES = 5
+        private const val STUDENT_CLASSES = 6
+        private const val STUDENT_CLASSES_DOCS = 7
+        private const val STUDENT_CALENDAR = 8
 
-        if (mDbHelper != null) {
-            mDbHelper.close();
-            mDbHelper = null;
-            mDb = null;
+        /**
+         * Build and return a [UriMatcher] that catches all [Uri] variations supported by
+         * this [ContentProvider].
+         */
+        private fun buildUriMatcher(context: Context?): UriMatcher {
+            val matcher = UriMatcher(UriMatcher.NO_MATCH)
+            val authority = context!!.packageName + ".provider"
+
+            // Users
+            matcher.addURI(authority, ClipMobileContract.PATH_USERS, USERS)
+
+            // Students
+            matcher.addURI(authority, ClipMobileContract.PATH_STUDENTS, STUDENTS)
+
+            // Students Year-Semester
+            matcher.addURI(
+                authority,
+                ClipMobileContract.PATH_STUDENTS_YEAR_SEMESTER,
+                STUDENTS_YEAR_SEMESTER
+            )
+
+            // Students Schedule Days
+            matcher.addURI(authority, ClipMobileContract.PATH_SCHEDULE_DAYS, SCHEDULE_DAYS)
+
+            // Students Schedule Classes
+            matcher.addURI(authority, ClipMobileContract.PATH_SCHEDULE_CLASSES, SCHEDULE_CLASSES)
+
+            // Student Classes
+            matcher.addURI(authority, ClipMobileContract.PATH_STUDENT_CLASSES, STUDENT_CLASSES)
+
+            // Student Classes Docs
+            matcher.addURI(
+                authority,
+                ClipMobileContract.PATH_STUDENT_CLASSES_DOCS,
+                STUDENT_CLASSES_DOCS
+            )
+
+            // Student Calendar
+            matcher.addURI(authority, ClipMobileContract.PATH_STUDENT_CALENDAR, STUDENT_CALENDAR)
+            return matcher
+        }
+
+        /**
+         * Builds selection using a [SelectionBuilder] to match the requested [Uri].
+         */
+        private fun buildSelection(uri: Uri, match: Int): SelectionBuilder {
+            val builder = SelectionBuilder()
+            return when (match) {
+                USERS -> builder.table(Tables.USERS)
+                STUDENTS -> builder.table(Tables.STUDENTS)
+                STUDENTS_YEAR_SEMESTER -> builder.table(Tables.STUDENTS_YEAR_SEMESTER)
+                SCHEDULE_DAYS -> builder.table(Tables.SCHEDULE_DAYS)
+                SCHEDULE_CLASSES -> builder.table(Tables.SCHEDULE_CLASSES)
+                STUDENT_CLASSES -> builder.table(Tables.STUDENT_CLASSES)
+                STUDENT_CLASSES_DOCS -> builder.table(Tables.STUDENT_CLASSES_DOCS)
+                STUDENT_CALENDAR -> builder.table(Tables.STUDENT_CALENDAR)
+                else -> throw UnsupportedOperationException("Unknown uri: $uri")
+            }
         }
     }
 }

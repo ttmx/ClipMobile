@@ -1,62 +1,56 @@
-package com.migueljteixeira.clipmobile.entities;
+package com.migueljteixeira.clipmobile.entities
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Parcelable
+import android.os.Parcel
+import android.os.Parcelable.Creator
 
-public class StudentCalendar extends Entity implements Parcelable {
-    private String name, date, hour, rooms, number;
+open class StudentCalendar : Entity, Parcelable {
+    var name: String? = null
+    var date: String? = null
+    var hour: String? = null
+    var rooms: String? = null
+    var number: String? = null
 
-    public StudentCalendar() {}
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-
-    public String getDate() { return date; }
-    public void setDate(String date) { this.date = date; }
-
-    public String getHour() { return hour; }
-    public void setHour(String hour) { this.hour = hour; }
-
-    public String getRooms() { return rooms; }
-    public void setRooms(String rooms) { this.rooms = rooms; }
-
-    public String getNumber() { return number; }
-    public void setNumber(String number) { this.number = number; }
-
-    protected StudentCalendar(Parcel in) {
-        name = in.readString();
-        date = in.readString();
-        hour = in.readString();
-        rooms = in.readString();
-        number = in.readString();
+    constructor() {}
+    protected constructor(`in`: Parcel) {
+        name = `in`.readString()
+        date = `in`.readString()
+        hour = `in`.readString()
+        rooms = `in`.readString()
+        number = `in`.readString()
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    override fun describeContents(): Int {
+        return 0
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeString(date);
-        dest.writeString(hour);
-        dest.writeString(rooms);
-        dest.writeString(number);
+    override fun writeToParcel(dest: Parcel, flags: Int) {
+        dest.writeString(name)
+        dest.writeString(date)
+        dest.writeString(hour)
+        dest.writeString(rooms)
+        dest.writeString(number)
     }
 
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<StudentCalendar> CREATOR = new Parcelable.Creator<StudentCalendar>() {
-        @Override
-        public StudentCalendar createFromParcel(Parcel in) {
-            return new StudentCalendar(in);
+//    companion object {
+//        val CREATOR: Creator<StudentCalendar> = object : Creator<StudentCalendar> {
+//            override fun createFromParcel(`in`: Parcel): StudentCalendar? {
+//                return StudentCalendar(`in`)
+//            }
+//
+//            override fun newArray(size: Int): Array<StudentCalendar?> {
+//                return arrayOfNulls(size)
+//            }
+//        }
+//    }
+
+    companion object CREATOR : Creator<StudentCalendar> {
+        override fun createFromParcel(parcel: Parcel): StudentCalendar {
+            return StudentCalendar(parcel)
         }
 
-        @Override
-        public StudentCalendar[] newArray(int size) {
-            return new StudentCalendar[size];
+        override fun newArray(size: Int): Array<StudentCalendar?> {
+            return arrayOfNulls(size)
         }
-    };
-
-
+    }
 }
