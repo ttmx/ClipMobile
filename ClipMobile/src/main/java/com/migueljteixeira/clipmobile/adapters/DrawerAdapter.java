@@ -71,10 +71,10 @@ public class DrawerAdapter extends ArrayAdapter<Object> {
         }
 
         DrawerItem item = (DrawerItem) getItem(position);
-        viewHolder.name.setText(item.mTitle);
+        viewHolder.name.setText(item.getMTitle());
 
         if(getItemViewType(position) == VIEW_TYPE_ITEM)
-            viewHolder.icon.setImageResource(item.mIconRes);
+            viewHolder.icon.setImageResource(item.getMIconRes());
 
         return convertView;
     }

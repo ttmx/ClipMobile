@@ -32,6 +32,12 @@ import com.migueljteixeira.clipmobile.util.DBUtils.insertStudentsNumbers
 import com.migueljteixeira.clipmobile.util.tasks.BaseTask
 import com.migueljteixeira.clipmobile.util.tasks.GetStudentCalendarTask
 import java.util.*
+import androidx.core.app.ActivityCompat
+
+import androidx.core.content.ContextCompat
+
+
+
 
 
 object StudentTools {
@@ -277,8 +283,10 @@ object StudentTools {
         return student
     }
 
+
     @JvmStatic
     fun confirmExportCalendar(mContext: Context): Map<Long, String> {
+
         val EVENT_PROJECTION = arrayOf(
             CalendarContract.Calendars._ID,  // 0
             CalendarContract.Calendars.ACCOUNT_NAME,  // 1
@@ -295,11 +303,11 @@ object StudentTools {
         // Run query
         val cr = mContext.contentResolver
         val uri = CalendarContract.Calendars.CONTENT_URI
-        val selection = "((" + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?))"
-        val selectionArgs = arrayOf("com.google")
+//        val selection = "((" + CalendarContract.Calendars.ACCOUNT_TYPE + " = ?))"
+//        val selectionArgs = arrayOf("com.google")
 
         // Submit the query and get a Cursor object back.
-        val cursor = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null)
+        val cursor = cr.query(uri, EVENT_PROJECTION, null, null, null)
         val calendarsNames: MutableMap<Long, String> = HashMap()
         while (cursor!!.moveToNext()) {
 
