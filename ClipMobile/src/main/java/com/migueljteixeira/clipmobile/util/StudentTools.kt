@@ -329,7 +329,7 @@ object StudentTools {
     @JvmStatic
     fun exportCalendar(mContext: Context, calendarId: Long) {
         val mTask =
-            GetStudentCalendarTask(mContext, object : BaseTask.OnTaskFinishedListener<Student> {
+            GetStudentCalendarTask(mContext, object : BaseTask.OnTaskFinishedListener<Student?> {
                 override fun onTaskFinished(result: Student?) {
                     val calendar = result!!.getStudentCalendar()
                     for ((isExam, calendarEvent) in calendar) {

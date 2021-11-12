@@ -1,101 +1,94 @@
-package com.migueljteixeira.clipmobile.adapters;
+package com.migueljteixeira.clipmobile.adapters
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.content.Context
+import android.widget.ArrayAdapter
+import com.migueljteixeira.clipmobile.ui.InfoContactsFragment.ContactInternal
+import com.migueljteixeira.clipmobile.adapters.InfoContactsListViewAdapter
+import com.migueljteixeira.clipmobile.ui.InfoContactsFragment.ContactExternal
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.view.View
+import com.migueljteixeira.clipmobile.R
+import android.widget.TextView
+import com.migueljteixeira.clipmobile.databinding.AdapterInfoContactTitleBinding
+import com.migueljteixeira.clipmobile.databinding.AdapterInfoExternalContactBinding
+import com.migueljteixeira.clipmobile.databinding.AdapterInfoInternalContactBinding
+import com.migueljteixeira.clipmobile.ui.InfoContactsFragment.ContactTitle
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.ui.InfoContactsFragment;
-
-public class InfoContactsListViewAdapter extends ArrayAdapter<Object> {
-    private static final int VIEW_TYPE_ITEM_CONTACT_TITLE = 0;
-    private static final int VIEW_TYPE_ITEM_CONTACT_INTERNAL = 1;
-    private static final int VIEW_TYPE_ITEM_CONTACT_EXTERNAL = 2;
-    private final Context mContext;
-
-    public InfoContactsListViewAdapter(Context context) {
-        super(context, 0);
-        this.mContext = context;
+class InfoContactsListViewAdapter(private val mContext: Context) : ArrayAdapter<Any?>(
+    mContext, 0
+) {
+    override fun getItemViewType(position: Int): Int {
+        if (getItem(position) is ContactInternal) return VIEW_TYPE_ITEM_CONTACT_INTERNAL else if (getItem(
+                position
+            ) is ContactExternal
+        ) return VIEW_TYPE_ITEM_CONTACT_EXTERNAL
+        return VIEW_TYPE_ITEM_CONTACT_TITLE
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(getItem(position) instanceof InfoContactsFragment.ContactInternal)
-            return VIEW_TYPE_ITEM_CONTACT_INTERNAL;
-
-        else if(getItem(position) instanceof InfoContactsFragment.ContactExternal)
-            return VIEW_TYPE_ITEM_CONTACT_EXTERNAL;
-
-        return VIEW_TYPE_ITEM_CONTACT_TITLE;
+    override fun getViewTypeCount(): Int {
+        return 3
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return 3;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if(convertView == null) {
-            viewHolder = new ViewHolder();
-
-            if(getItemViewType(position) == VIEW_TYPE_ITEM_CONTACT_INTERNAL) {
-                convertView = LayoutInflater.from(mContext)
-                        .inflate(R.layout.adapter_info_internal_contact, parent, false);
-
-                viewHolder.name = convertView.findViewById(R.id.contact_name);
-                viewHolder.phone = convertView.findViewById(R.id.contact_phone);
-                viewHolder.schedule = convertView.findViewById(R.id.contact_schedule);
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (convertView == null) {
+            viewHolder = ViewHolder()
+            when(getItemViewType(position)) {
+                VIEW_TYPE_ITEM_CONTACT_INTERNAL -> {
+                    val binding = AdapterInfoInternalContactBinding.inflate(LayoutInflater.from(mContext))
+                    convertView = binding.root
+                    viewHolder.name = binding.contactName
+                    viewHolder.phone = binding.contactPhone
+                    viewHolder.schedule = binding.contactSchedule
+                }
+                VIEW_TYPE_ITEM_CONTACT_EXTERNAL -> {
+                    val binding = AdapterInfoExternalContactBinding.inflate(LayoutInflater.from(mContext))
+                    convertView = binding.root
+                    viewHolder.name = binding.contactName
+                    viewHolder.phone = binding.contactPhone
+                }
+                else -> {
+                    val binding = AdapterInfoContactTitleBinding.inflate(LayoutInflater.from(mContext))
+                    convertView = binding.root
+                    viewHolder.title = binding.contactTitle
+                }
             }
-
-            else if(getItemViewType(position) == VIEW_TYPE_ITEM_CONTACT_EXTERNAL) {
-                convertView = LayoutInflater.from(mContext)
-                        .inflate(R.layout.adapter_info_external_contact, parent, false);
-
-                viewHolder.name = convertView.findViewById(R.id.contact_name);
-                viewHolder.phone = convertView.findViewById(R.id.contact_phone);
-            }
-
-            else {
-                convertView = LayoutInflater.from(mContext)
-                        .inflate(R.layout.adapter_info_contact_title, parent, false);
-
-                viewHolder.title = convertView.findViewById(R.id.contact_title);
-            }
-
-            convertView.setTag(viewHolder);
+            convertView.tag = viewHolder
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = convertView.tag as ViewHolder
         }
-
-        if(getItemViewType(position) == VIEW_TYPE_ITEM_CONTACT_INTERNAL) {
-            InfoContactsFragment.ContactInternal item = (InfoContactsFragment.ContactInternal) getItem(position);
-            viewHolder.name.setText(item.name);
-            viewHolder.phone.setText(item.phone);
-            viewHolder.schedule.setText(item.schedule);
+        when(getItemViewType(position)) {
+            VIEW_TYPE_ITEM_CONTACT_INTERNAL -> {
+                val item = getItem(position) as ContactInternal?
+                viewHolder.name!!.text = item!!.name
+                viewHolder.phone!!.text = item.phone
+                viewHolder.schedule!!.text = item.schedule
+            }
+            VIEW_TYPE_ITEM_CONTACT_EXTERNAL -> {
+                val item = getItem(position) as ContactExternal?
+                viewHolder.name!!.text = item!!.name
+                viewHolder.phone!!.text = item.phone
+            }
+            else -> {
+                val item = getItem(position) as ContactTitle?
+                viewHolder.title!!.text = item!!.name
+            }
         }
-
-        else if(getItemViewType(position) == VIEW_TYPE_ITEM_CONTACT_EXTERNAL) {
-            InfoContactsFragment.ContactExternal item = (InfoContactsFragment.ContactExternal) getItem(position);
-            viewHolder.name.setText(item.name);
-            viewHolder.phone.setText(item.phone);
-        }
-
-        else {
-            InfoContactsFragment.ContactTitle item = (InfoContactsFragment.ContactTitle) getItem(position);
-            viewHolder.title.setText(item.name);
-        }
-
-        return convertView;
+        return convertView
     }
 
-    private static class ViewHolder {
-        TextView title, name, phone, schedule;
+    private class ViewHolder {
+        var title: TextView? = null
+        var name: TextView? = null
+        var phone: TextView? = null
+        var schedule: TextView? = null
     }
 
+    companion object {
+        private const val VIEW_TYPE_ITEM_CONTACT_TITLE = 0
+        private const val VIEW_TYPE_ITEM_CONTACT_INTERNAL = 1
+        private const val VIEW_TYPE_ITEM_CONTACT_EXTERNAL = 2
+    }
 }

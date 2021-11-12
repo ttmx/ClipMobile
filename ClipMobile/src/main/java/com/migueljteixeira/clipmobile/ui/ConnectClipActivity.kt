@@ -1,22 +1,17 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.content.Intent;
-import android.os.Bundle;
+import android.content.Intent
+import android.os.Bundle
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getYearSelected
+import com.migueljteixeira.clipmobile.settings.ClipSettings.isUserLoggedIn
+import com.migueljteixeira.clipmobile.ui.NavDrawerActivity
 
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.settings.ClipSettings;
-
-public class ConnectClipActivity extends BaseActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_singlepane);
-
-        setupActionBar();
+class ConnectClipActivity : BaseActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_singlepane)
+        setupActionBar()
 
         // Crash system reporting
 //        Fabric.with(this, new Crashlytics());
@@ -24,27 +19,21 @@ public class ConnectClipActivity extends BaseActivity {
 //        Crashlytics.log("ConnectClipActivity - onCreate");
 
         // If the user has already login, start the StudentNumbersActivity instead
-        if (ClipSettings.isUserLoggedIn(this)) {
+        if (isUserLoggedIn(this)) {
 //            Crashlytics.log("ConnectClipActivity - user has already login");
-            Intent intent;
-            if (ClipSettings.getYearSelected(getApplicationContext()) == null) {
-                intent = new Intent(this, StudentNumbersActivity.class);
+            val intent: Intent = if (getYearSelected(applicationContext) == null) {
+                Intent(this, StudentNumbersActivity::class.java)
             } else {
-                intent = new Intent(this, NavDrawerActivity.class);
+                Intent(this, NavDrawerActivity::class.java)
             }
-
-
-            startActivity(intent);
-
-            finish();
+            startActivity(intent)
+            finish()
         }
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.content_frame);
+        val fm = supportFragmentManager
+        var fragment = fm.findFragmentById(R.id.content_frame)
         if (fragment == null) {
-            fragment = new ConnectClipFragment();
-            fm.beginTransaction().add(R.id.content_frame, fragment).commit();
+            fragment = ConnectClipFragment()
+            fm.beginTransaction().add(R.id.content_frame, fragment).commit()
         }
     }
-
 }

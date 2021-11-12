@@ -1,106 +1,91 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.content.res.Resources;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.adapters.CalendarViewPagerAdapter
+import com.migueljteixeira.clipmobile.entities.StudentCalendar
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getSemesterEndDate
+import com.migueljteixeira.clipmobile.settings.ClipSettings.getSemesterStartDate
+import com.migueljteixeira.clipmobile.ui.dialogs.CalendarDialogFragment
+import com.squareup.timessquare.CalendarPickerView
+import com.squareup.timessquare.CalendarPickerView.OnDateSelectedListener
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.Fragment;
-
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.adapters.CalendarViewPagerAdapter;
-import com.migueljteixeira.clipmobile.entities.StudentCalendar;
-import com.migueljteixeira.clipmobile.settings.ClipSettings;
-import com.migueljteixeira.clipmobile.ui.dialogs.CalendarDialogFragment;
-import com.squareup.timessquare.CalendarPickerView;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
-
-public class CalendarFragment extends Fragment implements CalendarPickerView.OnDateSelectedListener {
-
-    public static final String APPOINTMENT_TAG = "appointment_tag";
-    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private List<StudentCalendar> calendar;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        assert getArguments() != null;
-        calendar = getArguments().getParcelableArrayList(CalendarViewPagerAdapter.CALENDAR_TAG);
+class CalendarFragment : Fragment(), OnDateSelectedListener {
+    private val format = SimpleDateFormat("yyyy-MM-dd")
+    private var calendar: List<StudentCalendar>? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        assert(arguments != null)
+        calendar = requireArguments().getParcelableArrayList(CalendarViewPagerAdapter.CALENDAR_TAG)
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_calendar, container, false);
-        CalendarPickerView calendar = view.findViewById(R.id.calendar_view);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_calendar, container, false)
+        val calendar: CalendarPickerView = view.findViewById(R.id.calendar_view)
 
         // Set calendar background color
-        Resources resources = requireActivity().getResources();
-        calendar.setBackgroundColor(resources.getColor(R.color.main_background_color));
+        val resources = requireActivity().resources
+        calendar.setBackgroundColor(resources.getColor(R.color.main_background_color))
 
         // Set calendar start/end date and highlight dates
-        calendar.init(ClipSettings.getSemesterStartDate(getActivity()),
-                ClipSettings.getSemesterEndDate(getActivity()))
-                .withHighlightedDates(getDatesToHighlight());
-
-        calendar.setOnDateSelectedListener(this);
-
-        return view;
+        calendar.init(
+            getSemesterStartDate(requireActivity()),
+            getSemesterEndDate(requireActivity())
+        )
+            .withHighlightedDates(datesToHighlight)
+        calendar.setOnDateSelectedListener(this)
+        return view
     }
 
-    @Override
-    public void onDateSelected(Date date) {
-        if (this.calendar == null)
-            return;
-
-        for (StudentCalendar appointment : this.calendar) {
+    override fun onDateSelected(date: Date) {
+        if (calendar == null) return
+        for (appointment in calendar!!) {
             try {
-                Date appointmentDate = format.parse(appointment.getDate());
-
-                if (appointmentDate.equals(date)) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(APPOINTMENT_TAG, appointment);
+                val appointmentDate = format.parse(appointment.date)
+                if (appointmentDate == date) {
+                    val bundle = Bundle()
+                    bundle.putParcelable(APPOINTMENT_TAG, appointment)
 
                     // Create an instance of the dialog fragment and show it
-                    DialogFragment dialog = new CalendarDialogFragment();
-                    dialog.setArguments(bundle);
-                    dialog.show(getParentFragmentManager(), "CalendarDialogFragment");
+                    val dialog: DialogFragment = CalendarDialogFragment()
+                    dialog.arguments = bundle
+                    dialog.show(parentFragmentManager, "CalendarDialogFragment")
                 }
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } catch (e: ParseException) {
+                e.printStackTrace()
             }
         }
     }
 
-    @Override
-    public void onDateUnselected(Date date) {
-    }
-
-    private List<Date> getDatesToHighlight() {
-        List<Date> dates = new LinkedList<>();
-
-        if (calendar == null)
-            return dates;
-
-        for (StudentCalendar appointment : calendar) {
-            try {
-                Date date = format.parse(appointment.getDate());
-                dates.add(date);
-            } catch (ParseException e) {
-                e.printStackTrace();
+    override fun onDateUnselected(date: Date) {}
+    private val datesToHighlight: List<Date>
+        get() {
+            val dates: MutableList<Date> = LinkedList()
+            if (calendar == null) return dates
+            for (appointment in calendar!!) {
+                try {
+                    val date = format.parse(appointment.date)
+                    dates.add(date)
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
             }
+            return dates
         }
 
-        return dates;
+    companion object {
+        const val APPOINTMENT_TAG = "appointment_tag"
     }
 }

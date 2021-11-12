@@ -1,63 +1,55 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.FrameLayout
+import androidx.viewpager.widget.ViewPager
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.migueljteixeira.clipmobile.R
+import android.os.AsyncTask
+import android.view.View
+import androidx.fragment.app.Fragment
+import com.migueljteixeira.clipmobile.databinding.FragmentViewpagerBinding
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
-
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.databinding.FragmentViewpagerBinding;
-
-public class BaseViewPager extends Fragment {
-
-    FrameLayout mProgressSpinner;
-    ViewPager mViewPager;
-    protected View view;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+open class BaseViewPager : Fragment() {
+    var mProgressSpinner: FrameLayout? = null
+    lateinit var mViewPager: ViewPager
+    protected lateinit var rootView: View
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         // Retain this fragment across configuration changes.
-        setRetainInstance(true);
+        retainInstance = true
     }
 
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentViewpagerBinding binding = FragmentViewpagerBinding.inflate(inflater);
-        mViewPager = binding.viewPager;
-        mProgressSpinner = binding.getRoot().findViewById(R.id.progress_spinner);
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentViewpagerBinding.inflate(inflater)
+        mViewPager = binding.viewPager
+        mProgressSpinner = binding.root.findViewById(R.id.progress_spinner)
 
         // Show progress spinner
-        showProgressSpinnerOnly(true);
-
-        return binding.getRoot();
+        showProgressSpinnerOnly(true)
+        return binding.root
     }
 
     /**
      * Shows the progress spinner
      */
-    protected void showProgressSpinnerOnly(final boolean show) {
-        mProgressSpinner.setVisibility(show ? View.VISIBLE : View.GONE);
+    protected fun showProgressSpinnerOnly(show: Boolean) {
+        mProgressSpinner!!.visibility = if (show) View.VISIBLE else View.GONE
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
+    override fun onDestroyView() {
+        super.onDestroyView()
 
 //        ButterKnife.unbind(this);
-
     }
 
-    protected void cancelTasks(AsyncTask<?, ?, ?> mTask) {
-        if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED)
-            mTask.cancel(true);
+    protected fun cancelTasks(mTask: AsyncTask<*, *, *>?) {
+        if (mTask != null && mTask.status != AsyncTask.Status.FINISHED) mTask.cancel(true)
     }
-
 }

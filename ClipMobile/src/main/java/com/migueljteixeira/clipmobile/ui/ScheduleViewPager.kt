@@ -21,12 +21,12 @@ class ScheduleViewPager : BaseViewPager(), BaseTask.OnTaskFinishedListener<Stude
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        view = super.onCreateView(inflater, container, savedInstanceState)
+        rootView = super.onCreateView(inflater, container, savedInstanceState)!!
 
         // Start AsyncTask
         mTask = GetStudentScheduleTask(requireActivity(), this@ScheduleViewPager)
         mTask!!.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        return view
+        return rootView
     }
 
     override fun onTaskFinished(result: Student?) {
@@ -47,7 +47,7 @@ class ScheduleViewPager : BaseViewPager(), BaseTask.OnTaskFinishedListener<Stude
         mViewPager.setPageTransformer(true, DepthPageTransformer())
 
         // Bind the tabs to the ViewPager
-        val tabs: PagerSlidingTabStrip = view.findViewById(R.id.tabs)
+        val tabs: PagerSlidingTabStrip = rootView.findViewById(R.id.tabs)
         tabs.setViewPager(mViewPager)
     }
 

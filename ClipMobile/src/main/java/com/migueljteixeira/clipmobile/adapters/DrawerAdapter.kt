@@ -1,88 +1,68 @@
-package com.migueljteixeira.clipmobile.adapters;
+package com.migueljteixeira.clipmobile.adapters
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.ui.NavDrawerActivity.*
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.ui.NavDrawerActivity.DrawerDivider;
-import com.migueljteixeira.clipmobile.ui.NavDrawerActivity.DrawerItem;
-import com.migueljteixeira.clipmobile.ui.NavDrawerActivity.DrawerTitle;
-
-public class DrawerAdapter extends ArrayAdapter<Object> {
-    private static final int VIEW_TYPE_TITLE = 0;
-    private static final int VIEW_TYPE_DIVIDER = 1;
-    private static final int VIEW_TYPE_ITEM = 2;
-
-    private final Context mContext;
-
-    public DrawerAdapter(Context context) {
-        super(context, 0);
-        this.mContext = context;
+class DrawerAdapter(private val mContext: Context) : ArrayAdapter<Any?>(
+    mContext, 0
+) {
+    override fun getItemViewType(position: Int): Int {
+        if (getItem(position) is DrawerTitle) return VIEW_TYPE_TITLE else if (getItem(position) is DrawerDivider) return VIEW_TYPE_DIVIDER
+        return VIEW_TYPE_ITEM
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(getItem(position) instanceof DrawerTitle)
-            return VIEW_TYPE_TITLE;
-
-        else if(getItem(position) instanceof DrawerDivider)
-            return VIEW_TYPE_DIVIDER;
-
-        return VIEW_TYPE_ITEM;
+    override fun getViewTypeCount(): Int {
+        return 3
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return 3;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if(getItemViewType(position) == VIEW_TYPE_DIVIDER) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.drawer_divider, parent, false);
-            convertView.setOnClickListener(null);
-            return convertView;
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (getItemViewType(position) == VIEW_TYPE_DIVIDER) {
+            convertView =
+                LayoutInflater.from(context).inflate(R.layout.drawer_divider, parent, false)
+            convertView.setOnClickListener(null)
+            return convertView
         }
-
-        if(convertView == null) {
-            viewHolder = new ViewHolder();
-            
-            if(getItemViewType(position) == VIEW_TYPE_TITLE) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.drawer_title, parent, false);
-                convertView.setOnClickListener(null);
+        if (convertView == null) {
+            viewHolder = ViewHolder()
+            if (getItemViewType(position) == VIEW_TYPE_TITLE) {
+                convertView =
+                    LayoutInflater.from(context).inflate(R.layout.drawer_title, parent, false)
+                convertView.setOnClickListener(null)
+            } else {
+                convertView =
+                    LayoutInflater.from(mContext).inflate(R.layout.drawer_item, parent, false)
+                viewHolder.icon = convertView.findViewById(R.id.icon)
             }
-            else {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.drawer_item, parent, false);
-                viewHolder.icon = convertView.findViewById(R.id.icon);
-            }
-            
-            viewHolder.name = convertView.findViewById(R.id.name);
-            
-            convertView.setTag(viewHolder);
+            viewHolder.name = convertView.findViewById(R.id.name)
+            convertView.tag = viewHolder
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = convertView.tag as ViewHolder
         }
-
-        DrawerItem item = (DrawerItem) getItem(position);
-        viewHolder.name.setText(item.getMTitle());
-
-        if(getItemViewType(position) == VIEW_TYPE_ITEM)
-            viewHolder.icon.setImageResource(item.getMIconRes());
-
-        return convertView;
+        val item = getItem(position) as DrawerItem?
+        viewHolder.name!!.text = item!!.mTitle
+        if (getItemViewType(position) == VIEW_TYPE_ITEM) viewHolder.icon!!.setImageResource(
+            item.mIconRes
+        )
+        return convertView!!
     }
 
-    static class ViewHolder {
-
-        TextView name;
-        ImageView icon;
+    internal class ViewHolder {
+        var name: TextView? = null
+        var icon: ImageView? = null
     }
 
+    companion object {
+        private const val VIEW_TYPE_TITLE = 0
+        private const val VIEW_TYPE_DIVIDER = 1
+        private const val VIEW_TYPE_ITEM = 2
+    }
 }

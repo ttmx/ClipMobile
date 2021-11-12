@@ -1,111 +1,99 @@
-package com.migueljteixeira.clipmobile.adapters;
+package com.migueljteixeira.clipmobile.adapters
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
+import android.widget.TextView
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.entities.StudentClassDoc
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.entities.StudentClassDoc;
-
-import java.util.List;
-
-public class StudentClassesDocsAdapter extends BaseExpandableListAdapter {
-    private final String[] categories;
-    private final Context mContext;
-    private final List<StudentClassDoc> classDocs;
-
-    public StudentClassesDocsAdapter(Context context, String[] categories, List<StudentClassDoc> classDocs) {
-        this.mContext = context;
-        this.categories = categories;
-        this.classDocs = classDocs;
+class StudentClassesDocsAdapter(
+    private val mContext: Context,
+    private val categories: Array<String>,
+    private val classDocs: List<StudentClassDoc>
+) : BaseExpandableListAdapter() {
+    override fun getGroupCount(): Int {
+        return categories.size
     }
 
-    @Override
-    public int getGroupCount() {
-        return categories.length;
+    override fun getChildrenCount(groupPosition: Int): Int {
+        return classDocs.size
     }
 
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return classDocs.size();
+    override fun getGroup(groupPosition: Int): Any {
+        return categories[groupPosition]
     }
 
-    @Override
-    public Object getGroup(int groupPosition) {
-        return categories[groupPosition];
+    override fun getChild(groupPosition: Int, childPosition: Int): Any {
+        return classDocs[groupPosition]
     }
 
-    @Override
-    public Object getChild(int groupPosition, int childPosition) {
-        return classDocs.get(groupPosition);
+    override fun getGroupId(groupPosition: Int): Long {
+        return groupPosition.toLong()
     }
 
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+        return childPosition.toLong()
     }
 
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+    override fun hasStableIds(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if(convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_group_student_numbers, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.name = convertView.findViewById(R.id.name);
-
-            convertView.setTag(viewHolder);
+    override fun getGroupView(
+        groupPosition: Int,
+        isExpanded: Boolean,
+        convertView: View,
+        parent: ViewGroup
+    ): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext)
+                .inflate(R.layout.adapter_group_student_numbers, parent, false)
+            viewHolder = ViewHolder()
+            viewHolder.name = convertView.findViewById(R.id.name)
+            convertView.tag = viewHolder
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = convertView.tag as ViewHolder
         }
 
         // Set row name
-        viewHolder.name.setText(categories[groupPosition]);
-
-        return convertView;
+        viewHolder.name!!.text = categories[groupPosition]
+        return convertView
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if(convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_child_student_classes_docs, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.name = convertView.findViewById(R.id.name);
-
-            convertView.setTag(viewHolder);
+    override fun getChildView(
+        groupPosition: Int,
+        childPosition: Int,
+        isLastChild: Boolean,
+        convertView: View,
+        parent: ViewGroup
+    ): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext)
+                .inflate(R.layout.adapter_child_student_classes_docs, parent, false)
+            viewHolder = ViewHolder()
+            viewHolder.name = convertView.findViewById(R.id.name)
+            convertView.tag = viewHolder
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = convertView.tag as ViewHolder
         }
 
         // Set row name
-        viewHolder.name.setText(classDocs.get(childPosition).getName());
-
-        return convertView;
+        viewHolder.name!!.text = classDocs[childPosition].name
+        return convertView
     }
 
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        return true
     }
 
-    private static class ViewHolder {
-        TextView name;
+    private class ViewHolder {
+        var name: TextView? = null
     }
 }

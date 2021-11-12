@@ -1,33 +1,29 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
+import android.content.Context
+import android.util.AttributeSet
+import android.view.MotionEvent
+import androidx.drawerlayout.widget.DrawerLayout
 
 /**
  * Hacky fix for the following issue
  * https://code.google.com/p/android/issues/detail?id=60464
  */
-public class DrawerLayout extends androidx.drawerlayout.widget.DrawerLayout {
-    
-    public DrawerLayout(Context context) {
-        super(context);
-    }
+class DrawerLayoutFix : DrawerLayout {
+    constructor(context: Context?) : super(context!!)
+    constructor(context: Context?, attrs: AttributeSet?) : super(
+        context!!, attrs
+    )
 
-    public DrawerLayout(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+    constructor(context: Context?, attrs: AttributeSet?, defStyle: Int) : super(
+        context!!, attrs, defStyle
+    )
 
-    public DrawerLayout(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
-
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        try {
-            return super.onInterceptTouchEvent(ev);
-        } catch (Exception e) {
-            return false;
+    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean {
+        return try {
+            super.onInterceptTouchEvent(ev)
+        } catch (e: Exception) {
+            false
         }
     }
 }

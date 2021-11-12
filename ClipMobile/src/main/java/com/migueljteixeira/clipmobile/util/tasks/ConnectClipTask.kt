@@ -7,7 +7,7 @@ import com.migueljteixeira.clipmobile.enums.Result
 import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException
 import com.migueljteixeira.clipmobile.util.StudentTools.signIn
 
-class ConnectClipTask(context: Context?, private val mListener: OnTaskFinishedListener<Result>?) :
+class ConnectClipTask(context: Context?, private val mListener: OnTaskFinishedListener<Result?>?) :
     BaseTask<String?, Void?, Result?>(
         context!!
     ) {

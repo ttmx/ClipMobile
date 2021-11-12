@@ -29,7 +29,7 @@ class ClassesDocsFragment : BaseFragment(), GetStudentClassesDocsTask.OnTaskFini
     private var lastExpandedGroupPosition = 0
     private var mListView: ExpandableListView? = null
     private var mListAdapter: StudentClassesDocsAdapter? = null
-    private var classDocs: MutableList<StudentClassDoc>? = null
+    private lateinit var classDocs: MutableList<StudentClassDoc>
     private var mDocsTask: GetStudentClassesDocsTask? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -92,7 +92,7 @@ class ClassesDocsFragment : BaseFragment(), GetStudentClassesDocsTask.OnTaskFini
 //        }
         greedyLoadFiles()
         mListAdapter = StudentClassesDocsAdapter(
-            activity,
+            requireContext(),
             strings, classDocs
         )
         mListView!!.setAdapter(mListAdapter)
@@ -134,8 +134,8 @@ class ClassesDocsFragment : BaseFragment(), GetStudentClassesDocsTask.OnTaskFini
         lastExpandedGroupPosition = groupPosition
 
         // Set new data and notify adapter
-        classDocs!!.clear()
-        classDocs!!.addAll(result.classesDocs)
+        classDocs.clear()
+        classDocs.addAll(result.classesDocs)
         mListAdapter!!.notifyDataSetChanged()
 
         // Expand group position
@@ -143,8 +143,8 @@ class ClassesDocsFragment : BaseFragment(), GetStudentClassesDocsTask.OnTaskFini
     }
 
     var onChildClickListener = OnChildClickListener { parent, v, groupPosition, childPosition, id ->
-        val name = classDocs!![childPosition].name
-        val url = classDocs!![childPosition].url
+        val name = classDocs[childPosition].name
+        val url = classDocs[childPosition].url
 
         // Download document
         downloadDoc(requireActivity(), name, url!!)

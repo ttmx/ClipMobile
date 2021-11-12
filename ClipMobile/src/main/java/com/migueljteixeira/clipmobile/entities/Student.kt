@@ -20,8 +20,8 @@ class Student : Entity() {
         return years
     }
 
-    fun setYears(years: MutableList<StudentYearSemester>) {
-        this.years = years
+    fun setYears(years: List<StudentYearSemester>) {
+        this.years = years.toMutableList()
     }
 
     fun addYear(year: StudentYearSemester) {

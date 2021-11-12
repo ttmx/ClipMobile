@@ -12,7 +12,7 @@ import com.migueljteixeira.clipmobile.util.StudentTools.getStudentCalendar
 
 class GetStudentCalendarTask(
     context: Context,
-    private val mListener: OnTaskFinishedListener<Student>?
+    private val mListener: OnTaskFinishedListener<Student?>?
 ) : BaseTask<Void?, Void?, Student?>(context) {
     override fun doInBackground(vararg params: Void?): Student? {
         val studentId = getStudentIdSelected(mContext)

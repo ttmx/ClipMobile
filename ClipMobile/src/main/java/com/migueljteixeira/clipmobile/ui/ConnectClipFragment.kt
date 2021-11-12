@@ -1,111 +1,90 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.content.Intent
+import android.os.AsyncTask
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.databinding.FragmentActivityLoginBinding
+import com.migueljteixeira.clipmobile.enums.Result
+import com.migueljteixeira.clipmobile.util.tasks.BaseTask
+import com.migueljteixeira.clipmobile.util.tasks.ConnectClipTask
 
-import androidx.annotation.NonNull;
-
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.databinding.FragmentActivityLoginBinding;
-import com.migueljteixeira.clipmobile.enums.Result;
-import com.migueljteixeira.clipmobile.util.tasks.ConnectClipTask;
-
-public class ConnectClipFragment extends BaseFragment
-        implements ConnectClipTask.OnTaskFinishedListener<Result> {
-
-    EditText mUsername;
-    EditText mPassword;
-    Button mLogInButton;
-
-    private ConnectClipTask mTask;
-
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentActivityLoginBinding binding = FragmentActivityLoginBinding.inflate(inflater);
-        View root = binding.getRoot();
-        mUsername = binding.username;
-        mPassword = binding.password;
-        mLogInButton = binding.logInButton;
-        super.bindHelperViews(root);
-        return root;
+class ConnectClipFragment : BaseFragment(), BaseTask.OnTaskFinishedListener<Result?> {
+    var mUsername: EditText? = null
+    var mPassword: EditText? = null
+    var mLogInButton: Button? = null
+    private var mTask: ConnectClipTask? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val binding = FragmentActivityLoginBinding.inflate(inflater)
+        val root: View = binding.root
+        mUsername = binding.username
+        mPassword = binding.password
+        mLogInButton = binding.logInButton
+        super.bindHelperViews(root)
+        return root
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         // Unfinished task around?
-        if (mTask != null && mTask.getStatus() != AsyncTask.Status.FINISHED)
-            showProgressSpinner(true);
-
-        mLogInButton.setOnClickListener(v -> {
-            View mFocusView = null;
+        if (mTask != null && mTask!!.status != AsyncTask.Status.FINISHED) showProgressSpinner(true)
+        mLogInButton!!.setOnClickListener { v: View? ->
+            var mFocusView: View? = null
 
             // Get username and password text
-            Editable editableUsername = mUsername.getText();
-            String username = editableUsername != null ?
-                    editableUsername.toString().trim() : null;
-            Editable editablePassword = mPassword.getText();
-            String password = editablePassword != null ?
-                    editablePassword.toString().trim() : null;
+            val editableUsername = mUsername!!.text
+            val username = editableUsername?.toString()?.trim { it <= ' ' }
+            val editablePassword = mPassword!!.text
+            val password = editablePassword?.toString()?.trim { it <= ' ' }
 
             // Check if the username field is not empty
             if (TextUtils.isEmpty(username)) {
-                mUsername.setError(getString(R.string.error_fields_required));
-                mFocusView = mUsername;
+                mUsername!!.error = getString(R.string.error_fields_required)
+                mFocusView = mUsername
+            } else if (TextUtils.isEmpty(password)) {
+                mPassword!!.error = getString(R.string.error_fields_required)
+                mFocusView = mPassword
             }
-
-            // Check if the password field is not empty
-            else if (TextUtils.isEmpty(password)) {
-                mPassword.setError(getString(R.string.error_fields_required));
-                mFocusView = mPassword;
-            }
-
             if (mFocusView != null) {
                 // Focus the first form field with an error.
-                mFocusView.requestFocus();
+                mFocusView.requestFocus()
             } else {
-                showProgressSpinner(true);
+                showProgressSpinner(true)
 
                 // Start AsyncTask
-                mTask = new ConnectClipTask(getActivity(), ConnectClipFragment.this);
-                mTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, username, password);
-//                    AndroidUtils.executeOnPool(mTask, username, password);
+                mTask = ConnectClipTask(activity, this@ConnectClipFragment)
+                mTask!!.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, username, password)
+                //                    AndroidUtils.executeOnPool(mTask, username, password);
             }
-
-        });
+        }
     }
 
-    @Override
-    public void onTaskFinished(Result result) {
-        if (!isAdded())
-            return;
-
-        showProgressSpinner(false);
+    override fun onTaskFinished(result: Result?) {
+        if (!isAdded) return
+        showProgressSpinner(false)
 
         // If there was no errors, lets go to StudentNumbersActivity
-        if (result == Result.SUCCESS) {
-            Intent intent = new Intent(getActivity(), StudentNumbersActivity.class);
-            startActivity(intent);
-
-            getActivity().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out);
-            getActivity().finish();
+        if (result === Result.SUCCESS) {
+            val intent = Intent(activity, StudentNumbersActivity::class.java)
+            startActivity(intent)
+            requireActivity().overridePendingTransition(R.anim.slide_left_in, R.anim.slide_left_out)
+            requireActivity().finish()
         }
-
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-
-        cancelTasks(mTask);
+    override fun onDestroy() {
+        super.onDestroy()
+        cancelTasks(mTask)
     }
 }
