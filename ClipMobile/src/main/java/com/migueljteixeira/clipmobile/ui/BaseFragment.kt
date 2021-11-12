@@ -32,10 +32,8 @@ open class BaseFragment : Fragment() {
     }
 
     fun bindHelperViews(view: View?) {
-        var view = view
-        if (view == null) view = getView()
-        assert(view != null)
-        mProgressSpinner = view!!.findViewById(R.id.progress_spinner)
+        val view = view?:getView()?:return
+        mProgressSpinner = view.findViewById(R.id.progress_spinner)
         mMainView = view.findViewById(R.id.main_view)
     }
 
