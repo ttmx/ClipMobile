@@ -1,8 +1,13 @@
 # Picasso
--dontwarn com.squareup.okhttp.**
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp3.**
+-keep class com.squareup.okhttp3.** { *; }
+-keep interface com.squareup.okhttp3.** { *; }
+-dontwarn javax.annotation.Nullable
+-dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 # Crashlytics
--keep class com.crashlytics.** { *; }
+#-keep class com.crashlytics.** { *; }
 -keepattributes SourceFile,LineNumberTable
 
 # Jsoup
