@@ -40,6 +40,44 @@
 
     </RelativeLayout>
 
+
+
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/maintainer_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/about_developer"/>
+
+        <TextView
+            android:id="@+id/maintainer_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/about_maintainer_title"
+            android:textColor="@color/main_color_dark"
+            android:textSize="@dimen/default_text_size"
+            android:layout_toRightOf="@+id/maintainer_image"
+            android:layout_toEndOf="@+id/maintainer_image" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_maintainer_name"
+            android:textSize="@dimen/default_text_size"
+            android:layout_below="@+id/maintainer_title"
+            android:layout_toRightOf="@+id/maintainer_image"
+            android:layout_toEndOf="@+id/maintainer_image" />
+
+    </RelativeLayout>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

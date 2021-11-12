@@ -148,5 +148,7 @@
     <string name="about_logo_designer_name">João Coxixo</string>
     <string name="about_advisor_title">Advisor</string>
     <string name="about_advisor_name">Ricardo Carrapiço</string>
+    <string name="about_maintainer_title">Maintainer</string>
+    <string name="about_maintainer_name">Tiago Teles</string>
 
 </resources>
