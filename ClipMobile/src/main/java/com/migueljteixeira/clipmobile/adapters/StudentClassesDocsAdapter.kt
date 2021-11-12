@@ -45,9 +45,9 @@ class StudentClassesDocsAdapter(
     override fun getGroupView(
         groupPosition: Int,
         isExpanded: Boolean,
-        convertView: View,
+        convertView: View?,
         parent: ViewGroup
-    ): View {
+    ): View? {
         var convertView = convertView
         val viewHolder: ViewHolder
         if (convertView == null) {
@@ -69,9 +69,9 @@ class StudentClassesDocsAdapter(
         groupPosition: Int,
         childPosition: Int,
         isLastChild: Boolean,
-        convertView: View,
+        convertView: View?,
         parent: ViewGroup
-    ): View {
+    ): View? {
         var convertView = convertView
         val viewHolder: ViewHolder
         if (convertView == null) {
