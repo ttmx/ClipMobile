@@ -12,6 +12,9 @@ import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.DialogFragment
 import com.migueljteixeira.clipmobile.R
@@ -27,16 +30,11 @@ import com.migueljteixeira.clipmobile.util.StudentTools.confirmExportCalendar
 import com.migueljteixeira.clipmobile.util.tasks.BaseTask.OnUpdateTaskFinishedListener
 import com.migueljteixeira.clipmobile.util.tasks.UpdateStudentPageTask
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
-import androidx.core.app.ActivityCompat
-
-import androidx.core.content.ContextCompat
-import androidx.core.content.PermissionChecker
-import androidx.core.content.PermissionChecker.PERMISSION_GRANTED
 
 
 class NavDrawerActivity : BaseActivity(), OnItemClickListener,
-    OnUpdateTaskFinishedListener<Student?>,ActivityCompat.OnRequestPermissionsResultCallback {
-    private final val CALLBACK_ID = 0xca1
+    OnUpdateTaskFinishedListener<Student?>, ActivityCompat.OnRequestPermissionsResultCallback {
+    private val CALLBACK_ID = 0xca1
     private var mDrawerLayout: DrawerLayout? = null
     private lateinit var mDrawerList: ListView
     private var mUpdateTask: UpdateStudentPageTask? = null
@@ -152,7 +150,11 @@ class NavDrawerActivity : BaseActivity(), OnItemClickListener,
             mUpdateTask!!.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         } else if (item.itemId == R.id.export_calendar) {
 
-            checkPermission(CALLBACK_ID, Manifest.permission.READ_CALENDAR, Manifest.permission.WRITE_CALENDAR);
+            checkPermission(
+                CALLBACK_ID,
+                Manifest.permission.READ_CALENDAR,
+                Manifest.permission.WRITE_CALENDAR
+            )
         } else if (item.itemId == R.id.logout) {
             // Clear user personal data
             logoutUser(this)
@@ -191,7 +193,7 @@ class NavDrawerActivity : BaseActivity(), OnItemClickListener,
         return true
     }
 
-    private fun exportCalendar(){
+    private fun exportCalendar() {
 
         val calendarsNames: Map<Long, String?> = confirmExportCalendar(this)
         val ids = LongArray(calendarsNames.size)
@@ -227,11 +229,15 @@ class NavDrawerActivity : BaseActivity(), OnItemClickListener,
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-        if(requestCode == CALLBACK_ID){
-            if(grantResults.all { a-> a == PERMISSION_GRANTED }){
+        if (requestCode == CALLBACK_ID) {
+            if (grantResults.all { a -> a == PERMISSION_GRANTED }) {
                 exportCalendar()
-            }else{
-                Toast.makeText(this,"Permissões rejeitadas, não é possível exportar",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Permissões rejeitadas, não é possível exportar",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)

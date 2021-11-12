@@ -1,62 +1,49 @@
-package com.migueljteixeira.clipmobile.adapters;
+package com.migueljteixeira.clipmobile.adapters
 
-import android.os.Bundle;
-import android.os.Parcelable;
+import android.os.Bundle
+import android.os.Parcelable
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import com.migueljteixeira.clipmobile.entities.Student
+import com.migueljteixeira.clipmobile.entities.StudentScheduleClass
+import com.migueljteixeira.clipmobile.ui.ScheduleFragment
+import java.util.*
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-
-import com.migueljteixeira.clipmobile.entities.Student;
-import com.migueljteixeira.clipmobile.entities.StudentScheduleClass;
-import com.migueljteixeira.clipmobile.ui.ScheduleFragment;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class ScheduleViewPagerAdapter extends FragmentPagerAdapter {
-    public static final String SCHEDULE_CLASSES_TAG = "schedule_classes_tag";
-    private final String[] tabNames;
-    private final Student student;
-
-    public ScheduleViewPagerAdapter(FragmentManager fm, String[] tabNames, Student student) {
-        super(fm);
-        this.tabNames = tabNames;
-        this.student = student;
+class ScheduleViewPagerAdapter(
+    fm: FragmentManager,
+    private val tabNames: Array<String>,
+    private val student: Student
+) : FragmentPagerAdapter(
+    fm
+) {
+    override fun getPageTitle(position: Int): CharSequence {
+        return tabNames[position]
     }
 
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return tabNames[position];
+    override fun getItem(position: Int): Fragment {
+        val classes: List<StudentScheduleClass>? = student.getScheduleClasses()[position + 2]
+        val fragment: Fragment = ScheduleFragment()
+        fragment.arguments = getBundle(classes)
+        return fragment
     }
 
-    @NonNull
-    @Override
-    public Fragment getItem(int position) {
-        List<StudentScheduleClass> classes = student.getScheduleClasses().get(position + 2);
-
-        Fragment fragment = new ScheduleFragment();
-        fragment.setArguments(getBundle(classes));
-
-        return fragment;
+    override fun getCount(): Int {
+        return tabNames.size
     }
 
-    @Override
-    public int getCount() {
-        return tabNames.length;
-    }
-
-    private Bundle getBundle(List<StudentScheduleClass> classes) {
-        Bundle bundle = new Bundle();
-
+    private fun getBundle(classes: List<StudentScheduleClass>?): Bundle {
+        val bundle = Bundle()
         if (classes != null) {
             // LinkedList to ArrayList 'conversion'
-            ArrayList<StudentScheduleClass> list = new ArrayList<>(classes);
-
-            bundle.putParcelableArrayList(SCHEDULE_CLASSES_TAG, new ArrayList<Parcelable>(list));
+            val list = ArrayList(classes)
+            bundle.putParcelableArrayList(SCHEDULE_CLASSES_TAG, ArrayList<Parcelable>(list))
         }
 
-        return bundle;
+        return bundle
+    }
+
+    companion object {
+        const val SCHEDULE_CLASSES_TAG = "schedule_classes_tag"
     }
 }

@@ -1,47 +1,35 @@
-package com.migueljteixeira.clipmobile.adapters;
+package com.migueljteixeira.clipmobile.adapters
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
+import android.content.Context
+import android.widget.ArrayAdapter
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.view.View
+import com.migueljteixeira.clipmobile.R
+import android.widget.TextView
+import com.migueljteixeira.clipmobile.ui.ClassesFragment
 
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.ui.ClassesFragment;
-
-public class ClassListViewAdapter extends ArrayAdapter<Object> {
-    private final Context mContext;
-
-    public ClassListViewAdapter(Context context) {
-        super(context, 0);
-        this.mContext = context;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-
-        if(convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.adapter_class, parent, false);
-
-            viewHolder = new ViewHolder();
-            viewHolder.name = convertView.findViewById(R.id.class_name);
-
-            convertView.setTag(viewHolder);
+class ClassListViewAdapter(private val mContext: Context) : ArrayAdapter<Any?>(
+    mContext, 0
+) {
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        var convertView = convertView
+        val viewHolder: ViewHolder
+        if (convertView == null) {
+            convertView =
+                LayoutInflater.from(mContext).inflate(R.layout.adapter_class, parent, false)
+            viewHolder = ViewHolder()
+            viewHolder.name = convertView.findViewById(R.id.class_name)
+            convertView.tag = viewHolder
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = convertView.tag as ViewHolder
         }
-
-        ClassesFragment.ListViewItem item = (ClassesFragment.ListViewItem) getItem(position);
-        viewHolder.name.setText(item.name);
-
-        return convertView;
+        val item = getItem(position) as ClassesFragment.ListViewItem?
+        viewHolder.name!!.text = item!!.name
+        return convertView!!
     }
 
-    static class ViewHolder {
-
-        TextView name;
+    internal class ViewHolder {
+        var name: TextView? = null
     }
-
 }

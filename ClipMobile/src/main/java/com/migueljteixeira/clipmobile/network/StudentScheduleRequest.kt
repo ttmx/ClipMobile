@@ -48,14 +48,16 @@ object StudentScheduleRequest : Request() {
                 scheduleClassType += href[8].substring(href[8].length - 1)
                 val scheduleClassName = td.attr("title")
                 val scheduleClassNameMin = child[0].toString()
-                var scheduleClassRoom: String? = null
-                if (child.size > 4) scheduleClassRoom =
-                    Html.fromHtml(child[4].toString()).toString()
+                val scheduleClassRoom: String = if (child.size > 4) Html.fromHtml(
+                    child[4].toString(),
+                    Html.FROM_HTML_MODE_LEGACY
+                ).toString()
+                else "No Room Specified"
                 val scheduleClassDuration = td.attr("rowspan")
 
                 // Calculate scheduleClassHourStart & End
-                var scheduleClassHourStart: String? = null
-                var scheduleClassHourEnd: String? = null
+                lateinit var scheduleClassHourStart: String
+                lateinit var scheduleClassHourEnd: String
                 try {
                     val format1 = SimpleDateFormat("k:mm")
                     val dateDuration = scheduleClassDuration.toInt() / 2

@@ -6,21 +6,21 @@ import android.os.Parcelable.Creator
 import com.migueljteixeira.clipmobile.entities.StudentScheduleClass
 
 open class StudentScheduleClass : Entity, Parcelable {
-    var name: String? = null
-    var nameMin: String? = null
-    var type: String? = null
-    var hourStart: String? = null
-    var hourEnd: String? = null
-    var room: String? = null
+    lateinit var name: String
+    lateinit var nameMin: String
+    lateinit var type: String
+    lateinit var hourStart: String
+    lateinit var hourEnd: String
+    lateinit var room: String
 
     constructor() {}
     protected constructor(`in`: Parcel) {
-        name = `in`.readString()
-        nameMin = `in`.readString()
-        type = `in`.readString()
-        hourStart = `in`.readString()
-        hourEnd = `in`.readString()
-        room = `in`.readString()
+        name = `in`.readString()!!
+        nameMin = `in`.readString()!!
+        type = `in`.readString()!!
+        hourStart = `in`.readString()!!
+        hourEnd = `in`.readString()!!
+        room = `in`.readString()!!
     }
 
     override fun describeContents(): Int {

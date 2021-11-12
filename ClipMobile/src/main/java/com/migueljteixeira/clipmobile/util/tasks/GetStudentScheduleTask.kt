@@ -10,7 +10,7 @@ import com.migueljteixeira.clipmobile.exceptions.ServerUnavailableException
 
 class GetStudentScheduleTask(
     context: Context,
-    private val mListener: OnTaskFinishedListener<Student>?
+    private val mListener: OnTaskFinishedListener<Student?>?
 ) : BaseTask<Void?, Void?, Student?>(context) {
     override fun doInBackground(vararg params: Void?): Student? {
         val studentId = ClipSettings.getStudentIdSelected(mContext)

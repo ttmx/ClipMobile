@@ -1,66 +1,49 @@
-package com.migueljteixeira.clipmobile.ui;
+package com.migueljteixeira.clipmobile.ui
 
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ListView
+import androidx.fragment.app.Fragment
+import com.migueljteixeira.clipmobile.R
+import com.migueljteixeira.clipmobile.adapters.ScheduleListViewAdapter
+import com.migueljteixeira.clipmobile.adapters.ScheduleViewPagerAdapter
+import com.migueljteixeira.clipmobile.entities.StudentScheduleClass
 
-import androidx.fragment.app.Fragment;
-
-import com.migueljteixeira.clipmobile.R;
-import com.migueljteixeira.clipmobile.adapters.ScheduleListViewAdapter;
-import com.migueljteixeira.clipmobile.adapters.ScheduleViewPagerAdapter;
-import com.migueljteixeira.clipmobile.entities.StudentScheduleClass;
-
-import java.util.List;
-
-public class ScheduleFragment extends Fragment {
-
-    private List<StudentScheduleClass> classes;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        classes = getArguments().getParcelableArrayList(ScheduleViewPagerAdapter.SCHEDULE_CLASSES_TAG);
+class ScheduleFragment : Fragment() {
+    private var classes: List<StudentScheduleClass>? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        classes = requireArguments().getParcelableArrayList(ScheduleViewPagerAdapter.SCHEDULE_CLASSES_TAG)
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.list_view, container, false);
-        ListView listView = view.findViewById(R.id.list_view);
-
-        ScheduleListViewAdapter adapter = new ScheduleListViewAdapter(getActivity());
-
-        if (classes == null)
-            adapter.add(new ListViewItemEmpty());
-        else {
-            for (StudentScheduleClass c : classes)
-                adapter.add(new ListViewItem(c.getName(), c.getType(), c.getHourStart(),
-                        c.getHourEnd(), c.getRoom()));
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = inflater.inflate(R.layout.list_view, container, false)
+        val listView = view.findViewById<ListView>(R.id.list_view)
+        val adapter = ScheduleListViewAdapter(requireContext())
+        if (classes == null) adapter.add(ListViewItemEmpty()) else {
+            for (c in classes!!) adapter.add(
+                ListViewItem(
+                    c.name, c.type, c.hourStart,
+                    c.hourEnd, c.room
+                )
+            )
         }
-
-        listView.setAdapter(adapter);
-
-        return view;
+        listView.adapter = adapter
+        return view
     }
 
-    public static class ListViewItemEmpty {
-
-        public ListViewItemEmpty() {
-        }
-    }
-
-    public static class ListViewItem {
-        public String name, type, hour_start, hour_end, room;
-
-        public ListViewItem(String name, String type, String hour_start, String hour_end, String room) {
-            this.name = name;
-            this.type = type;
-            this.hour_start = hour_start;
-            this.hour_end = hour_end;
-            this.room = room;
-        }
-    }
+    class ListViewItemEmpty
+    class ListViewItem(
+        var name: String,
+        var type: String,
+        var hour_start: String,
+        var hour_end: String,
+        var room: String?
+    )
 }
