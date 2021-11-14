@@ -22,7 +22,7 @@ class CalendarViewPagerAdapter(
     }
 
     override fun getItem(position: Int): Fragment {
-        val calendar: List<StudentCalendar> = student.getStudentCalendar()[position == 1]!!
+        val calendar: List<StudentCalendar>? = student.getStudentCalendar()[position == 1]
         val fragment: Fragment = CalendarFragment()
         fragment.arguments = getBundle(calendar)
         return fragment
